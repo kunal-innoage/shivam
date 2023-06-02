@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record model="product.template" id="demo_data_product_template_record_1A">
+            <field name="name">Inno Carpet AAAA</field>
+             <field name="sale_line_warn">no-message</field>
+             <field name="base_unit_count">0.00</field>
+        </record>
+        <record model="product.product" id="demo_data_product_template_record_1Aq">
+            <field name="name">Yarn AAAA</field>
+             <field name="sale_line_warn">no-message</field>
+             <field name="base_unit_count">0.00</field>
+        </record>
+        <record model="product.template" id="demo_data_product_template_record_2B">
+            <field name="name">Inno Carpet BBBB</field>
+             <field name="sale_line_warn">no-message</field>
+             <field name="base_unit_count">0.00</field>
+        </record>
+        <record model="product.template" id="demo_data_product_template_record_3C">
+            <field name="name">Inno Carpet CCCC</field>
+             <field name="sale_line_warn">no-message</field>
+             <field name="base_unit_count">0.00</field>
+        </record>
+        <record model="product.template" id="demo_data_product_template_record_4D">
+            <field name="name">Inno Carpet DDDD</field>
+             <field name="sale_line_warn">no-message</field>
+             <field name="base_unit_count">0.00</field>
+        </record>
+    </data>
+</odoo>

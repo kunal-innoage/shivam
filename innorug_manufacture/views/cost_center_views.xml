@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cost Center Tree -->
+    <record id="view_mrp_cost_center_tree" model="ir.ui.view">
+        <field name="name">Cost Center</field>
+        <field name="model">mrp.cost.center</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="mrp_production_id" string="Manufacture Order"/>
+                <field name="subcontractor_id"/>
+                <field name="work_center_id"/>
+                <field name="product_qty"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Cost Center Form -->
+    <record id="view__mrp_cost_center_form" model="ir.ui.view">
+        <field name="name">Cost Center</field>
+        <field name="model">mrp.cost.center</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <div class="h2">
+                        <field name="product_id" nolabel="1"/>
+                    </div>
+                    <div>
+                        <field name="issue_date"/>
+                        <field name="expected_received_date"/>
+                    </div>
+                    <group col="4">
+                        <field name="work_center_id"/>
+                        <field name="subcontractor_id"/>
+                        <field name="product_qty"/>
+                        <label for="time_incentive"/>
+                        <div class="o_row">
+                            <field name="time_incentive" widget="float"/>
+                            <span>INR</span>
+                        </div>
+                        <label for="time_penalities"/>
+                        <div class="o_row">
+                            <field name="time_penalities" widget="float"/>
+                            <span>INR</span>
+                        </div>
+                        <field name="fragments"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+    <!-- action through python module "work order" -->
+    <record model="ir.actions.act_window" id="mrp_cost_centre_action_id">
+        <field name="name">Cost Center</field>
+        <field name="res_model">mrp.cost.center</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view__mrp_cost_center_form"/>
+    </record>
+
+
+
+
+    <record id="action_mrp_cost_center_id" model="ir.actions.act_window">
+        <field name="name">Cost Center</field>
+        <field name="res_model">mrp.cost.center</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <!-- <menuitem id="menu_cost_center_id" name="Cost Center" parent="menu_mrp_bazar_id" action="action_mrp_cost_center_id" sequence="1"/>  -->
+</odoo> 

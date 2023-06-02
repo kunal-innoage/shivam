@@ -1,0 +1,110 @@
+<odoo>
+
+    <template id="report_gate_pass_record">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="width : 100%">
+                        <div class ="oe_structue">
+                            <div class ="row">
+                                <div class ="col-xs-8">
+                                    <h3 class="text-center">GATE PASS</h3>
+                                    <table class = "table table - condensed">
+                                        <tr>
+                                            <td width="100%">
+                                                <div class= "row">
+                                                    <div class = "col-8">
+                                                        <p >Subcontractor : <span t-field="o.subcontractor_id"/>
+                                                        </p>
+                                                        <p>Work Center : <span t-field="o.work_center_id"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class = "col-4">
+                                                        <p>Warehouse : <span t-field="o.warehouse"/>
+                                                        </p>
+                                                        <p>Date : <span t-field="o.issue_date"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <br></br>
+                                                <div class= "row">
+                                                    <div class = "col-8">
+                                                        <p>Reference : <span t-field="o.reference"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class = "col-4">
+                                                        <p>Remarks : <span t-field="o.remarks"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <table class="table table-bordered">
+                                                            <thead style="display: table-row-group">
+                                                                <tr>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Product</th>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Quantity</th>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Units</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <t t-foreach="o.subcontracter_alloted_product_id" t-as="id">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span t-field="id.alloted_product_id"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span t-field="id.alloted_quantity"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span/>KG</td>
+                                                                    </tr>
+                                                                </t>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="print_gate_pass_report">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="o">
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <span t-field="o.work_center_id"/>
+                        </div>
+                        <table style="width:243pt; height:153pt; border: 1pt solid black; border-collapse:separate; border-radius:8pt; margin:5pt">
+                            <span t-field="o.work_center_id"/>
+                        </table>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+
+
+    <record id="action_report_gate_pass_id" model="ir.actions.report">
+        <field name="name">Gate Pass</field>
+        <field name="model">mrp.job.work</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">innorug_manufacture.report_gate_pass_record</field>
+        <field name="report_file">innorug_manufacture.report_gate_pass_record</field>
+        <field name="binding_model_id" ref="model_mrp_job_work"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

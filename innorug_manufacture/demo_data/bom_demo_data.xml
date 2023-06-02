@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+      <record id="mrp_bom_desk1" model="mrp.bom">
+            <field name="product_tmpl_id" ref="innorug_manufacture.demo_data_product_template_record_1A"/>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+            <field name="sequence">3</field>
+            <field name="consumption">flexible</field>
+        </record>
+          <!-- <record id="mrp_bom_desk_line_innoage" model="mrp.bom.line">
+            <field name="product_id" ref="innorug_manufacture.demo_data_product_template_record_1Aq"/>
+            <field name="product_qty">4</field>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+            <field name="sequence">1</field>
+            <field name="bom_id" ref="innorug_manufacture.mrp_bom_desk2"/>
+            <field name="operation_id" ref="innorug_manufacture.operation_routing_demo_record2"/>
+        </record> -->
+          <record id="mrp_bom_desk2" model="mrp.bom">
+            <field name="product_tmpl_id" ref="innorug_manufacture.demo_data_product_template_record_2B"/>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+            <field name="sequence">3</field>
+            <field name="consumption">flexible</field>
+        </record>
+          <record id="mrp_bom_desk3" model="mrp.bom">
+            <field name="product_tmpl_id" ref="innorug_manufacture.demo_data_product_template_record_3C"/>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+            <field name="sequence">3</field>
+            <field name="consumption">flexible</field>
+        </record>
+          <record id="mrp_bom_desk4" model="mrp.bom">
+            <field name="product_tmpl_id" ref="innorug_manufacture.demo_data_product_template_record_4D"/>
+            <field name="product_uom_id" ref="uom.product_uom_unit"/>
+            <field name="sequence">3</field>
+            <field name="consumption">flexible</field>
+        </record>
+        
+    </data>
+</odoo>

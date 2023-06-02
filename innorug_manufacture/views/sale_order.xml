@@ -1,0 +1,13 @@
+<odoo>
+  <record model="ir.actions.server" id="action_update_invoice_date">
+    <field name="name">Update Invoice Date</field>
+    <field name="model_id" ref="account.model_sale_order"/>
+    <field name="binding_model_id" ref="account.model_sale_order"/>
+    <field name="state">code</field>
+    <field name="code">
+           action = records.action_surya_sale_order_mrp()
+    </field>
+  </record>
+
+</odoo> 
+    

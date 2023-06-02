@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cost Center Tree -->
+    <record id="view_mrp_subcontractor_alloted_lines_tree" model="ir.ui.view">
+        <field name="name">subcontractor.alloted.product</field>
+        <field name="model">subcontractor.alloted.product</field>
+        <field name="arch" type="xml">
+            <tree create ="false">
+
+                <field name="alloted_product_id"/>
+                <field name="alloted_quantity"/>
+                <field name="consumed_quantity"/>
+                <field name="returned_quantity"/>
+                 <field name="amended_quantity"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+ amended_quantity = fields.Float("Amended Qty(kg)")
+
+    <!-- Cost Center Form -->
+    <!-- <record id="view__mrp_cost_center_form" model="ir.ui.view">
+            <field name="name">Cost Center</field>
+            <field name="model">mrp.cost.center</field>
+            <field name="arch" type="xml">
+                <form >
+                    <sheet>  
+                    <div><field name="product_id" nolabel="1"/></div>
+                    <div> <field name="issue_date"/>
+                     <field name="expected_received_date"/></div>
+                        <group col="4">        
+                             <field name="work_center_id"/>
+                             <field name="subcontractor_id"/>
+                              <field name="product_qty"/>
+                            <field name="time_incentive"/>
+                            <field name="time_penalities"/>
+                            <field name="fragments"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record> -->
+
+</odoo> 

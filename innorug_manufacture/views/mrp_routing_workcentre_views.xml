@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_routing_workcenter_inherited_bom_ids_details_id" model="ir.ui.view">
+        <field name="name">mrp.bom</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_bom_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="workcenter_id" position="after">
+                <button name="view_action_bom_materials_allotments" string="Allotment Bom" type="object" class="oe_stat_button">
+                </button>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="mrp_routing_work_center_form_view_inherited_bom_id" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Alloted Components" name="operation_component_ids">
+                        <field name="operation_component_ids" mode="tree">
+                            <tree editable="bottom">
+                                <field name="product_bom_id" invisible="1"/>
+                                <field name="product_bom_line_id"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="product_uom_id"/>
+                                <!-- <field name="is_percentage" widget="boolean_toggle"/> -->
+                                <!-- <field name="product_qty_percentage" attrs="{'invisible': [('is_percentage','!=',False)]}"/> -->
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

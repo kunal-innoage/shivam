@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_stock_warehouse_form_view_inheritedww_product_product_id" model="ir.ui.view">
+        <field name="name">product.template</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='responsible_id']" position="after">
+                    <field name="design"/>
+                    <field name="size"/>
+                    <field name="shape"/>
+                    <field name="size_type"/>
+                    <label for="lenght_fraction"/>
+                    <div class="o_row">
+                        <field name="lenght_fraction" widget="float" readonly="1"/>
+                        <span></span>
+                    </div>
+                    <label for="area"/>
+                    <div class="o_row">
+                        <field name="area" widget="float" readonly="1"/>
+                        <span> square yard</span>
+                    </div>
+                    <label for="perimeter"/>
+                    <div class="o_row">
+                        <field name="perimeter" widget="float" readonly="1"/>
+                        <span>m</span>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>
