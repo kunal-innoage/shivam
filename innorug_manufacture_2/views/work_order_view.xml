@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_mrp_workorder_form_view_inherited_s" model="ir.ui.view">
+        <field name="name">mrp workorder</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_editable_view"/>
+        <field name="arch" type="xml">
+            <field name="workcenter_id" position="after">
+                <field name="manager_id" />
+            </field>
+            <!-- <field name="show_json_popover" position="after">
+                <button name="action_view_cost_centre" type="object" class="oe_stat_button" icon="fa-inr">
+                </button>
+            </field> -->
+        </field>
+    </record>
+    <!-- icon="fa-external-link" class="oe_edit_only" -->
+
+    <record id="mrp_mrp_job_work_order_form_view_inherited_id" model="ir.ui.view">
+        <field name="name">mrp.workorder</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='duration_expected']/.." position="after">
+                    <!-- <label for="total_duration"/>
+                    <div class="o_row">
+                        <field name="total_duration" widget="float"/>
+                        <span>Days</span>
+                    </div> -->
+                    <!-- <field name="qty_production" readonly="1" string= "Quantity"/> -->
+
+                    <label for="qty_production" string="Total Quantity"/>
+                    <div class="o_row">
+                        <field name="qty_production" readonly="1"/>
+                        <span>Units</span>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='production_id']" position="after">
+                    <field name="manager_id" readonly="1"/>
+                    <field name="production_bom_id" readonly="1"/>
+                    <field name="workcenter_id" string="Operation" readonly="1"/>
+                    <label for="remaining_qty"/>
+                    <div class="o_row">
+                        <field name="remaining_qty" widget="float"/>
+                        <span>Units</span>
+                    </div>
+                </xpath>
+                <xpath expr="//label[@for='duration_expected']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='duration_expected']/.." position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <!-- <xpath expr="//notebook" position="inside">
+                    <page string="Default Alloted Product" name="default_alloted_product_ids">
+                        <field name="default_alloted_product_ids" mode="tree">
+                            <tree>
+                                <field name="alloted_product_id"/>
+                                <field name="alloted_quantity" string="Alloted Qty (Kg)"/>
+                                <field name="consumed_quantity" string="Conssumed Qty (Kg)"/>
+                                <field name="returned_quantity" string="Returned Qty (Kg)"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath> -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Job Work" name="job_work_lines_ids">
+                        <field name="job_work_lines_ids" mode="tree">
+                            <tree>
+                                <field name="subcontractor_id"/>
+                                <!-- <field name="product_id"/> -->
+                                <field name="issue_date" />
+                                <field name="expected_received_date"/>
+                                <field name="total_day" widget="float" invisible='1'/>
+                                <field name="product_qty"/>
+                                <!-- <button class="oe_stat_button" type="object" name="action_view_allotment_product_job_work" string="Allotment Materials">
+                                </button> -->
+                                <!-- <button icon="fa-file" class="oe_edit_only" type="object" name="action_view_allotment_job_work">
+                                </button> -->
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree -->
+        <record id="view_surya_excel_sale_order_tree_view" model="ir.ui.view">
+            <field name="name">surya.excel.sale.order</field>
+            <field name="model">surya.excel.sale.order</field>
+            <field name="arch" type="xml">
+                <tree >
+                    <field name="name"/>
+                    <field name="country"/>
+                    <field name="quantity"/>
+                    <field name="product"/>
+                    <field name="order_no"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="sale_order_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!-- Form -->
+        <record id="view_surya_excel_sale_order_form_view" model="ir.ui.view">
+            <field name="name">Wayfair B2b Sale Order</field>
+            <field name="model">surya.excel.sale.order</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="address"/>
+                                <field name="country"/>
+                                <field name="order_no"/>
+                                <field name="mobile"/>
+                                <field name="email"/>
+                                <field name="quantity"/>
+                                <field name="product"/>
+                                <field name="order_date"/>
+                                <field name="due_date"/>
+                                <field name="rate"/>
+                                <field name="buyer_up_code"/>
+                                <field name="partner_id"/>
+                                <field name="product_id"/>
+                                <field name="sale_order_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <!-- Server Actions -->
+
+        <record id="model_surya_excel_sale_order_mapping_server_id" model="ir.actions.server">
+            <field name="name">Map Bulk Orders</field>
+            <field name="model_id" ref="innorug_manufacture.model_surya_excel_sale_order"/>
+            <field name="binding_model_id" ref="innorug_manufacture.model_surya_excel_sale_order"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.map_with_bulk_order_record()</field>
+            <!-- <field name="code">
+            for record in records:
+                record.map_with_bulk_order_record()
+        </field> -->
+        </record>
+
+
+        <record id="action_mrp_sale_import_id" model="ir.actions.act_window">
+            <field name="name">Surya Data</field>
+            <field name="res_model">surya.excel.sale.order</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem id="menu_surya_import_excel_id" name="Surya Import Excel" parent="sale.sale_order_menu" action="action_mrp_sale_import_id" sequence="5"/>
+
+
+    </data>
+</odoo>
+    

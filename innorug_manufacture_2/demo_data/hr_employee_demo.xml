@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+      <record id="hr_employee_id" model="hr.employee">
+            <field name="name">Weaving Vendor</field>
+            <field name="work_phone">2228778782222</field>
+        </record>
+        <record id="hr_employee_id2" model="hr.employee">
+            <field name="name">Finishing Vendor</field>
+            <field name="work_phone">5459898966</field>
+        </record>
+
+
+        <record id="hr_contract_id" model="hr.contract">
+            <field name="name">Sub Assemble</field>
+             <field name="employee_id"  ref="innorug_manufacture.hr_employee_id"/>
+              <field name="wage">525</field>
+        </record>
+        <record id="hr_contract_id2" model="hr.contract">
+            <field name="name">Final Assemble</field>
+             <field name="employee_id"  ref="innorug_manufacture.hr_employee_id2"/>
+              <field name="wage">700</field>
+        </record>
+
+
+
+        <record id="hr_salary_attachment_id_1" model="hr.salary.attachment">
+            <field name="description">salary details</field>
+             <field name="employee_id"  ref="innorug_manufacture.hr_employee_id"/>
+              <field name="monthly_amount">2000</field>
+               <field name="total_amount">2000</field>
+        </record>
+        <record id="hr_salary_attachment_id_2" model="hr.salary.attachment">
+            <field name="description">salary details</field>
+             <field name="employee_id"  ref="innorug_manufacture.hr_employee_id2"/>
+             <field name="monthly_amount">1000 </field>
+               <field name="total_amount">1000</field>
+        </record>
+    </data>
+</odoo>
