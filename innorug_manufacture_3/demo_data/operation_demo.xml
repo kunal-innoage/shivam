@@ -1,0 +1,35 @@
+<odoo>
+    <data noupdate="1">
+        
+        <record model="mrp.routing.workcenter" id="operation_routing_demo_record1">
+            <field name="name">Planning</field>
+             <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk1"/>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_weaving_plan_record1"/>
+        </record>
+         <record model="mrp.routing.workcenter" id="operation_routing_demo_record2">
+            <field name="name">Weaving</field>
+            <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk2"/>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_weaving_bazar_record2"/>
+        </record> 
+        <record model="mrp.routing.workcenter" id="operation_routing_demo_record3">
+            <field name="name">Quality Check Weaving </field>
+            <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk2"/>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_data_quality_check_record3"/>
+        </record>
+         <record model="mrp.routing.workcenter" id="operation_routing_demo_record4">
+            <field name="name">Finishing </field>
+            <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk2"/>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_data_finishing_plan_record4"/>
+        </record>
+         <record model="mrp.routing.workcenter" id="operation_routing_demo_record5">
+            <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk3"/>
+            <field name="name">Quality Finishing </field>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_data_quality_check_record3"/>
+        </record>
+        <record model="mrp.routing.workcenter" id="operation_routing_demo_record6">
+            <field name="name">Packaging </field>
+            <field name="bom_id"  ref="innorug_manufacture.mrp_bom_desk4"/>
+            <field name="workcenter_id"  ref="innorug_manufacture.demo_data_packaging_plan_record5"/>
+        </record> 
+    </data>
+</odoo>

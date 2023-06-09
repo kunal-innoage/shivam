@@ -1,0 +1,107 @@
+<odoo>
+
+    <template id="report_cost_center_record">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="width : 100%">
+                        <div class ="oe_structue">
+                            <div class ="row">
+                                <div class ="col-xs-8">
+                                    <h3 class="text-center">Cost Center</h3>
+                                    <table class = "table table - condensed">
+                                        <tr>
+                                            <td width="100%">
+                                                 <div class= "row">
+                                                    <div class = "col-8">
+                                                        <p >Subcontractor : <span t-field="o.subcontractor_id"/>
+                                                        </p>
+                                                        <p>Work Center : <span t-field="o.work_center_id"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class = "col-4">
+                                                        <p>Manager : <span t-field="o.manager_id"/>
+                                                        </p>
+                                                        <p>Date : <span t-field="o.issue_date"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <br></br>
+                                                <div class= "row">
+                                                    <div class = "col-8">
+                                                        <p>Warehouse : <span t-field="o.warehouse"/>
+                                                        </p>
+                                                        <p>Reference : <span t-field="o.reference"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class = "col-4">
+                                                        <p>Remarks : <span t-field="o.remarks"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <table class="table table-bordered">
+                                                            <thead style="display: table-row-group">
+                                                                <tr>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Product</th>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Quantity</th>
+                                                                    <!-- <th class="text-center" style="width: 30%" scope="col">Units</th> -->
+                                                                    <th class="text-center" style="width: 100%" scope="col">Time Incentive</th>
+                                                                    <th class="text-center" style="width: 100%" scope="col">Time Penality</th>
+                                                                     <th class="text-center" style="width: 30%" scope="col">Fragments</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <t t-foreach="o.cost_center_ids" t-as="id">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span t-field="id.product_id"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span t-field="id.product_qty"/>
+                                                                       <span/>Units </td>
+                                                                        <td>
+                                                                            <span t-field="id.time_incentive"/>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span t-field="id.time_penalities"/>
+                                                                        </td>
+                                                                         <td>
+                                                                            <span t-field="id.fragments"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+
+
+
+
+
+    <record id="action_report_cost_center_id" model="ir.actions.report">
+        <field name="name">Cost Center Report</field>
+        <field name="model">mrp.job.work</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">innorug_manufacture.report_cost_center_record</field>
+        <field name="report_file">innorug_manufacture.report_cost_center_record</field>
+        <field name="binding_model_id" ref="model_mrp_job_work"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

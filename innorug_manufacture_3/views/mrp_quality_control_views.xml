@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_quality_check_form_view_inherited" model="ir.ui.view">
+        <field name="name">quality.check</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+             <xpath expr="//field[@name= 'product_id']" position="before">
+                      <field name="subcontractor_id" />
+                </xpath>
+                <xpath expr="//field[@name= 'team_id']" position="after">
+                      <field name="subcontractor_id" />
+                    <field name="active_cancel" attrs="{'invisible': [('quality_state', 'in',['none', 'pass'])]}"/>
+                    <field name="active_delayed" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="mrp_quality_check_tree_view_inherited" model="ir.ui.view">
+        <field name="name">quality.check</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_tree"/>
+        <field name="arch" type="xml">
+            <data>
+             <xpath expr="//field[@name= 'name']" position="after">
+                      <field name="subcontractor_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+  
+  
+</odoo>
