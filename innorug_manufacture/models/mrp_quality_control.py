@@ -12,6 +12,29 @@ class MrpQualityCheck(models.Model):
     active_cancel = fields.Boolean("Cancel")
     active_delayed = fields.Boolean("Delayed")
     subcontractor_id = fields.Many2one('res.partner', string='Subcontractors')
+    state_job = fields.Selection(related='job_work_id.state')
+    
+
+
+
+
+
+    def do_pass(self):
+        self.job_work_id.state = "waiting_baazar"
+        self.job_work_id.active_baazar =  True
+        self.job_work_id.active_hide_qa =True
+        return super(MrpQualityCheck, self).do_pass()
+     
+    def do_fail(self):
+        self.job_work_id.state = "qa"
+        self.job_work_id.active_baazar =  False
+        return super(MrpQualityCheck, self).do_fail()
+    
+
+
+
+
+
 
 
     @api.model_create_multi

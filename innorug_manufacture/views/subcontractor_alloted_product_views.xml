@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Cost Center Tree -->
+    <!-- mrp_subcontractor_alloted Tree -->
     <record id="view_mrp_subcontractor_alloted_lines_tree" model="ir.ui.view">
         <field name="name">subcontractor.alloted.product</field>
         <field name="model">subcontractor.alloted.product</field>

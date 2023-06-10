@@ -48,7 +48,7 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <t t-foreach="o.subcontracter_alloted_product_id" t-as="id">
+                                                                <t t-foreach="o.subcontracter_alloted_product_ids" t-as="id">
                                                                     <tr>
                                                                         <td>
                                                                             <span t-field="id.alloted_product_id"/>
@@ -67,6 +67,9 @@
                                             </td>
                                         </tr>
                                     </table>
+                                     <div>
+                                         <span  t-field ="o.mrp_production_id.name" t-options ="{'widget' : 'barcode','humanreadable' : 1 , 'width' : 400, 'height' : 100}"/>
+                                        </div>
                                 </div>
                             </div>
                         </div>
