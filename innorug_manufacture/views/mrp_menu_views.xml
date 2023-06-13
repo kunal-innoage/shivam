@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mrp_bazar_id" 
+    name="Bazaar"
+    parent="mrp.menu_mrp_root" 
+    sequence="26"/>
+
+    <menuitem id="menu_job_work_id" 
+    name="Job Work" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_job_work_id" 
+    sequence="1"/>
+
+
+
+    <menuitem id="menu_quality_control_id" 
+    name="Quality Control" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_quality_controls_id" 
+    sequence="2"/>
+
+
+    <!-- <menuitem id="menu_cost_center_id" 
+    name="Cost Center" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_cost_center_id" 
+    sequence="1"/>  -->
+</odoo> 

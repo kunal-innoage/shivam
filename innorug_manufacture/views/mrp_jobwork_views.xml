@@ -36,6 +36,7 @@
                     <button name="button_action_for_no_return_qty" string="NO RETURN" type="object" class="btn-primary" attrs="{'invisible': [('active_no_return', '=',False)]}" />
                     <button name="button_action_for_done" string="DONE" type="object" class="btn-primary" attrs="{'invisible': [('active_done', '=',False)]}" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received" />
                     <button name="button_action_for_cancel" string="CANCEL" type="object" class="btn-primary" attrs="{'invisible': [('active_cancel', '=',False)]}" />
+                    <button name="button_action_for_force_qa" string="FORCE QA" type="object" class="btn-primary" attrs="{'invisible': [('state', 'not in',['qa'])]}" />
                     <field name="state" widget="statusbar" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received,cancel" />
                 </header>
                 <sheet>
@@ -49,29 +50,29 @@
                         <group>
                             <field name="subcontractor_id" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }" />
                             <field name="manager_id"/>
-                            <label for="total_weight" string="Total Expected Weight"  attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}"/>
-                                        <div class="o_row"   attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}">
-                                            <field name="total_weight" widget="float" readonly="1"/>
-                                            <span>KG</span>
-                                                  </div>
+                            <label for="total_weight" string="Total Expected Weight" attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}"/>
+                            <div class="o_row" attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}">
+                                <field name="total_weight" widget="float" readonly="1"/>
+                                <span>KG</span>
+                            </div>
                         </group>
                     </group>
                     <h5>Order Timeline</h5>
                     <group>
                         <group>
-                        <label for="issue_date" string="Planned Date"/>
-                        <div class="oe_inline">
-                            <field name="issue_date" class="mr8 oe_inline" required="True"/>
-                            <strong class="mr8 oe_inline">to</strong>
-                            <field name="expected_received_date" class="oe_inline" required="True"/>
-                        </div>
+                            <label for="issue_date" string="Planned Date"/>
+                            <div class="oe_inline">
+                                <field name="issue_date" class="mr8 oe_inline" required="True"/>
+                                <strong class="mr8 oe_inline">to</strong>
+                                <field name="expected_received_date" class="oe_inline" required="True"/>
+                            </div>
                         </group>
                         <group>
-                         <label for="total_day" string="E.T.A" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }" />
-                                        <div class="o_row" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }" >
-                                            <field name="total_day" widget="float"/>
-                                            <span>Days</span>
-                                        </div>
+                            <label for="total_day" string="E.T.A" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }" />
+                            <div class="o_row" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }">
+                                <field name="total_day" widget="float"/>
+                                <span>Days</span>
+                            </div>
                         </group>
                     </group>
                     <h5 attrs="{'invisible': [('active_hide_qa', '=',False)]}">QA Configuration</h5>
@@ -98,6 +99,7 @@
                             <field name="active_no_return" invisible="1"/>
                             <field name="active_done" invisible="1"/>
                             <field name="active_cancel" invisible="1"/>
+                            <field name="active_force_qa" invisible="1"/>
 
                         </group>
                     </div>
@@ -149,7 +151,24 @@
                                     <field name="quality_state"/>
                                     <field name="state_job" invisible="1"/>
                                     <button name="do_pass" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
-                                    <button name="do_fail" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none','pass'])] }" />
+                                    <button name="do_fail" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Quality Control" name="quality_control_ids" attrs="{'invisible': [('active_qa', '=',False)]}">
+                            <field name="quality_control_ids" mode="tree">
+                                <tree>
+                                    <field name="product_id"/>
+                                    <field name="production_id"/>
+                                    <field name="quality_state"/>
+                                      <field name="state_job" invisible="1"/>
+                                    <button name="do_pass_qc" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
+                                    <button name="do_fail_qc" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
+
+                                    
+                                    <!-- <button name="do_pass" type="object" class="btn-primary" string="Pass" data-hotkey="q"/>
+                                    <button name="do_fail" type="object" class="btn-primary" string="Fail" data-hotkey="w" /> -->
                                 </tree>
                             </field>
                         </page>
@@ -159,8 +178,8 @@
                                 <h5>SKU's Quantity Received</h5>
                                 <group>
                                     <group>
-                                      
-                                         <label for="total_receive_product_qty"/>
+
+                                        <label for="total_receive_product_qty"/>
                                         <div class="o_row">
                                             <field name="total_receive_product_qty" widget="float"/>
                                             <span>QTY</span>
@@ -172,7 +191,7 @@
                                         </div>
                                     </group>
                                     <group>
-                                         <label for="pending__product_qty"/>
+                                        <label for="pending__product_qty"/>
                                         <div class="o_row">
                                             <field name="pending__product_qty" widget="float"/>
                                             <span>QTY</span>
@@ -231,6 +250,11 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -320,9 +344,5 @@
     </record>
 
 
-
-    <menuitem id="menu_mrp_bazar_id" name="Bazaar" parent="mrp.menu_mrp_root" sequence="26"/>
-
-    <menuitem id="menu_job_work_id" name="Job Work" parent="menu_mrp_bazar_id" action="action_mrp_job_work_id" sequence="1"/>
 
 </odoo> 

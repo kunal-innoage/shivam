@@ -1,13 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
 innorug_manufacture_mrp_cost_center,access_mrp_cost_center,innorug_manufacture.model_mrp_cost_center,,1,1,1,1
-
 innorug_manufacture_data_access_surya_excel_sale_order,access_surya_excel_sale_order,innorug_manufacture.model_surya_excel_sale_order,,1,1,1,1
-
 innorug_manufacture.mrp_job_work,access_mrp_job_work,innorug_manufacture.model_mrp_job_work,,1,1,1,1
-
 innorug_manufacture.bom_operation_component,access_bom_operation_component,innorug_manufacture.model_bom_operation_component,,1,1,1,1
-
 innorug_manufacture.subcontractor_alloted_product,access_subcontractor_alloted_product,innorug_manufacture.model_subcontractor_alloted_product,,1,1,1,1
+innorug_manufacture.mrp_quality_control,access_mrp_quality_control,innorug_manufacture.model_mrp_quality_control,,1,1,1,1
 
 

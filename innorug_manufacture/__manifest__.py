@@ -1,6 +1,6 @@
 {
     "name" : "InnoRug Manufacturing",
-    "depends": ['mrp','sale', 'stock','product','account',"hr_contract"],
+    "depends": ['mrp','sale', 'stock','product','account',"hr_contract",'mail'],
     "data": [
         "security/ir.model.access.csv",
         'views/work_order_view.xml',
@@ -17,6 +17,7 @@
         "views/subcontractor_alloted_product_views.xml",
         "views/product_views.xml",
         "views/mrp_quality_control_views.xml",
+        'views/mrp_menu_views.xml',
         # "views/sale_order.xml",
     ],
     'application': True,

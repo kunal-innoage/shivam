@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 class MrpJobWork(models.Model):
     _name = "mrp.job.work"
     _description = 'Job Work'
+    _inherit = ['mail.thread','mail.activity.mixin']
     _rec_name = "product_id"
 
     name = fields.Char("Job Work")
@@ -18,7 +19,7 @@ class MrpJobWork(models.Model):
     
     product_qty = fields.Float("Quantity(Units)")
     qty_production = fields.Float('Original Production Quantity', readonly=True, related='mrp_production_id.product_qty')
-    remaining_qty = fields.Float(string="Remaining Quantity", default= 0.0)
+    remaining_qty = fields.Float(string="Remaining Quantity", default= 0.0, tracking = True)
 
     mrp_work_order_id = fields.Many2one("mrp.workorder", "Work Order")
 
@@ -26,7 +27,7 @@ class MrpJobWork(models.Model):
     product_id = fields.Many2one(related="mrp_work_order_id.product_id", string="MRP Production")
     manager_id = fields.Many2one(related="mrp_work_order_id.manager_id", string="Manager")
 
-    subcontractor_id = fields.Many2one('res.partner', string='Subcontractors')
+    subcontractor_id = fields.Many2one('res.partner', string='Subcontractors', tracking=True)
     cost_center_id = fields.Many2one("mrp.cost.center", "Cost Center")
 
 
@@ -39,8 +40,8 @@ class MrpJobWork(models.Model):
 
 
     # issue_date = fields.Datetime(related="mrp_work_order_id.date_planned_start", string="Issue Date", readonly=False)
-    issue_date = fields.Date(string='Issued Date')
-    expected_received_date = fields.Date(string='Expected Date')
+    issue_date = fields.Date(string='Issued Date', tracking = True)
+    expected_received_date = fields.Date(string='Expected Date' , tracking = True)
     total_day = fields.Integer(string='Total')
 
 
@@ -66,6 +67,7 @@ class MrpJobWork(models.Model):
     active_done = fields.Boolean("done")
     active_done_state = fields.Boolean("Active Done")
     active_cancel = fields.Boolean("cancel")
+    active_force_qa = fields.Boolean("force")
 
 
     #Gate Pass
@@ -78,6 +80,11 @@ class MrpJobWork(models.Model):
     quality_check_ids = fields.One2many("quality.check","job_work_id", string="Quality Check")
     team_id =fields.Many2one("quality.alert.team", "Team")
     test_type_id = fields.Many2one("quality.point.test_type","Test Type")
+    
+    
+    #quality control relation
+    quality_control_ids = fields.One2many("mrp.quality.control","job_work_id", string="Quality Check")
+    
     
 
 
@@ -103,7 +110,7 @@ class MrpJobWork(models.Model):
     #Baazar Details for receive product
     baazar_details = fields.Char("Bazar Details")
     total_weight = fields.Float("Total Weight")
-    total_receive_product_qty = fields.Integer("Total Receive Quantity")
+    total_receive_product_qty = fields.Integer("Total Receive Quantity", tracking = True)
     pending__product_qty = fields.Integer("Pending Quantity") 
     total__receive_weight = fields.Float("Receive Weight") 
 
@@ -185,6 +192,13 @@ class MrpJobWork(models.Model):
         self.active_done = False
         self.subcontracter_alloted_product_ids.activate_return =False
         self.active_cancel = False
+        pass
+    
+    
+    def button_action_for_force_qa(self):
+        self.active_force_qa = False
+        for rec in self.quality_check_ids:
+            rec.do_pass()
         pass
 
 
@@ -273,14 +287,14 @@ class MrpJobWork(models.Model):
         self.active_qa = True
         self.active_hide_qa = False
         self.active_no_amended = False
+        self.active_force_qa = True
+        self.active_baazar = False
         self.subcontracter_alloted_product_ids.activate_amended_qty = True
         self.subcontracter_alloted_product_ids.activate_amended = False
         self.subcontracter_alloted_product_ids.activate_consume_qty = True
         for rec in self.subcontracter_alloted_product_ids:
             if rec.returned_quantity == 0:
                 rec.consumed_quantity = rec.total_allot_qty
-        quality_alert_team_id = self.env['quality.alert.team'].search([])
-        quality_point_id = self.env['quality.point.test_type'].search([], limit=1)
         for job_work in self:
             if not job_work.team_id or not job_work.test_type_id:
                  raise UserError(_("Please select Team and Test Type"))  
@@ -294,7 +308,19 @@ class MrpJobWork(models.Model):
             })
             if qlty_check_id:
                 job_work.quality_check_ids += qlty_check_id
+                
+            qlty_control_id = self.env["mrp.quality.control"].create({
+                "subcontractor_id" : job_work.subcontractor_id.id,
+                "product_id" : self.product_id.id,
+                "production_id" : self.mrp_production_id.id,
+                "operation_id" : self.work_center_id.id,
+                "job_work_id" : job_work.id
+            })
+            if qlty_control_id:
+                job_work.quality_control_ids += qlty_control_id            
         pass
+
+
 
 
 
