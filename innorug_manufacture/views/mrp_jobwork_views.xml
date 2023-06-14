@@ -75,13 +75,6 @@
                             </div>
                         </group>
                     </group>
-                    <h5 attrs="{'invisible': [('active_hide_qa', '=',False)]}">QA Configuration</h5>
-                    <group attrs="{'invisible': [('active_hide_qa', '=',False)]}">
-                        <group>
-                            <field name="team_id"/>
-                            <field name="test_type_id"/>
-                        </group>
-                    </group>
                     <div>
                         <group col="4">
 
@@ -141,21 +134,6 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Quality Check" name="quality_check_ids" attrs="{'invisible': [('active_qa', '=',False)]}">
-                            <field name="quality_check_ids" mode="tree">
-                                <tree>
-                                    <field name="test_type_id"/>
-                                    <field name="team_id"/>
-                                    <field name="product_id"/>
-                                    <field name="production_id"/>
-                                    <field name="quality_state"/>
-                                    <field name="state_job" invisible="1"/>
-                                    <button name="do_pass" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
-                                    <button name="do_fail" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
-                                </tree>
-                            </field>
-                        </page>
-
                         <page string="Quality Control" name="quality_control_ids" attrs="{'invisible': [('active_qa', '=',False)]}">
                             <field name="quality_control_ids" mode="tree">
                                 <tree>
@@ -166,9 +144,6 @@
                                     <button name="do_pass_qc" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
                                     <button name="do_fail_qc" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
 
-                                    
-                                    <!-- <button name="do_pass" type="object" class="btn-primary" string="Pass" data-hotkey="q"/>
-                                    <button name="do_fail" type="object" class="btn-primary" string="Fail" data-hotkey="w" /> -->
                                 </tree>
                             </field>
                         </page>

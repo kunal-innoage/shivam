@@ -76,10 +76,7 @@ class MrpJobWork(models.Model):
     remarks =fields.Text( string="Remarks")
 
 
-    #Quality Control relation
-    quality_check_ids = fields.One2many("quality.check","job_work_id", string="Quality Check")
-    team_id =fields.Many2one("quality.alert.team", "Team")
-    test_type_id = fields.Many2one("quality.point.test_type","Test Type")
+ 
     
     
     #quality control relation
@@ -197,8 +194,10 @@ class MrpJobWork(models.Model):
     
     def button_action_for_force_qa(self):
         self.active_force_qa = False
-        for rec in self.quality_check_ids:
-            rec.do_pass()
+        for rec in self.quality_control_ids:
+            rec.do_pass_qc()
+        today = datetime.today()
+        self.message_post(body= today, subject="QC FORCE")
         pass
 
 
@@ -295,20 +294,7 @@ class MrpJobWork(models.Model):
         for rec in self.subcontracter_alloted_product_ids:
             if rec.returned_quantity == 0:
                 rec.consumed_quantity = rec.total_allot_qty
-        for job_work in self:
-            if not job_work.team_id or not job_work.test_type_id:
-                 raise UserError(_("Please select Team and Test Type"))  
-            qlty_check_id = self.env["quality.check"].create({
-                "subcontractor_id" : job_work.subcontractor_id.id,
-                "product_id" : self.product_id.id,
-                "production_id" : self.mrp_production_id.id,
-                "test_type_id"  : job_work.test_type_id.id,
-                "team_id" : job_work.team_id.id,
-                "job_work_id" : job_work.id
-            })
-            if qlty_check_id:
-                job_work.quality_check_ids += qlty_check_id
-                
+        for job_work in self:    
             qlty_control_id = self.env["mrp.quality.control"].create({
                 "subcontractor_id" : job_work.subcontractor_id.id,
                 "product_id" : self.product_id.id,

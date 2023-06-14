@@ -65,3 +65,19 @@ class MrpProduction(models.Model):
                 else:
                     self.job_order_id.mrp_production_id = self.id
         return self.view_job_order_action()
+    
+    
+    def action_view_mrp_job_quality_control(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("Quality Control"),
+            'view_mode': 'list,form',
+            'res_model': 'mrp.quality.control',
+            # 'context': {
+            #     'search_default_order_logs': 1,
+            # },
+            'domain': [('production_id','=',self.id)]
+        }
+
+        

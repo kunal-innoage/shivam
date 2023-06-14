@@ -27,6 +27,9 @@
                     <button class="oe_stat_button" type="object" name="action_view_mrp_job_work"
                        string ="Job Work" icon="fa-user">
                     </button>
+                     <button class="oe_stat_button" type="object" name="action_view_mrp_job_quality_control"
+                       string ="Quality Control" icon="fa-check">
+                    </button>
                 </div>
             </field>
         </record>
