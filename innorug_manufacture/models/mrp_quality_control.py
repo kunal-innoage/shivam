@@ -12,6 +12,7 @@ class MrpQualityControl(models.Model):
     product_id = fields.Many2one("product.product", string="Product")
     team = fields.Char("Quality Team")
     subcontractor_id = fields.Many2one('res.partner', string='Subcontractors')
+    qc_manager_id = fields.Many2one('res.partner', string="QC Manager")
     type = fields.Selection([
         ('instructions','Instructions'),
         ('take_a_picture','Take a Picture'),
@@ -52,7 +53,8 @@ class MrpQualityControl(models.Model):
     def do_pass_qc(self):
         today = datetime.today()
         self.quality_state='pass'
-        self.job_work_id.message_post(body= today, subject="PROCESS QC PASS")
+        subject="PASS : "
+        self.job_work_id.message_post(body=subject + str(today))
         self.job_work_id.state = "waiting_baazar"
         self.job_work_id.active_baazar =  True
         self.job_work_id.active_force_qa =  True
@@ -61,7 +63,8 @@ class MrpQualityControl(models.Model):
      
     def do_fail_qc(self):
         today = datetime.today()
-        self.job_work_id.message_post(body= today, subject="PROCESS QC FAIL")
+        subject="FAIL : "
+        self.job_work_id.message_post(body=subject + str(today))
         self.job_work_id.state = "qa"
         self.quality_state='fail'
         self.job_work_id.active_baazar =  False

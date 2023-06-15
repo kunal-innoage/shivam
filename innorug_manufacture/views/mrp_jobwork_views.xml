@@ -40,6 +40,11 @@
                     <field name="state" widget="statusbar" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received,cancel" />
                 </header>
                 <sheet>
+                    <!-- <div class="oe_title">
+                        <h1>
+                            <field name="reference_no" placeholder="Manufacturing Reference" nolabel="1"/>
+                        </h1>
+                    </div> -->
                     <group>
                         <group>
                             <field name="product_id" string="Product"/>
@@ -75,6 +80,13 @@
                             </div>
                         </group>
                     </group>
+
+                     <h5 attrs="{'invisible': [('active_hide_qa', '=',False)]}">QA Configuration</h5>
+                    <group attrs="{'invisible': [('active_hide_qa', '=',False)]}">
+                        <group>
+                            <field name="qc_manager_id"/>
+                        </group>
+                    </group>
                     <div>
                         <group col="4">
 
@@ -93,6 +105,7 @@
                             <field name="active_done" invisible="1"/>
                             <field name="active_cancel" invisible="1"/>
                             <field name="active_force_qa" invisible="1"/>
+                            <field name="reference_no" invisible="1" nolabel="1"/>
 
                         </group>
                     </div>
@@ -105,7 +118,7 @@
                                 <tree create= "false" editable="True">
                                     <field name="alloted_product_id"/>
                                     <field name="alloted_quantity" sum="Alloted Qty" string="Alloted Qty"/>
-                                    <field name="amended_quantity" sum="Total Amended Qty" attrs="{'invisible': [('activate_amended_qty', '=',False)] ,'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done'])] }" />
+                                    <field name="amended_quantity" sum="Total Amended Qty" required="True" attrs="{'invisible': [('activate_amended_qty', '=',False)] ,'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done'])] }" />
                                     <field name="consumed_quantity" sum="Total Consumed Qty" attrs="{'invisible': [('activate_consume_qty', '=',False)]}" />
                                     <field name="returned_quantity" sum="Total Return Qty" attrs="{'invisible': [('activate_return_qty', '=',False)]}" />
                                     <field name="total_allot_qty" sum="Total Alloted Qty" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','received'])] }" />
@@ -117,9 +130,13 @@
                                     <field name="activate_consume_qty" invisible="1"/>
                                     <field name="activate_amended_qty" invisible="1"/>
                                     <field name="state" invisible="1"/>
+                                    <field name="activate_confirm_amended" invisible="1"/>
+                                    <field name="activate_confirm_return" invisible="1"/>
                                     <button name="button_action_for_return" string="ADD RETURN" type="object" class="btn-primary" attrs="{'invisible': [('activate_return', '=',False)]}" />
+                                    <button name="button_action_for_confim_return" string="CONFIRM RETURN" type="object" class="btn-primary" attrs="{'invisible': [('activate_confirm_return', '=',False)]}" />
                                     <!-- <button name="button_action_for_consume" string="CONSUME" type="object" class="btn-primary" attrs="{'invisible': [('activate_consume', '=',False)]}" /> -->
-                                    <button name="button_action_for_amended" string="ADD AMENDED" type="object" class="btn-primary" attrs="{'invisible': [('activate_amended', '=',False)]}" />
+                                    <button name="button_action_for_amended" string="ADD AMENDED" type="object" class="btn-primary" data-hotkey="q" attrs="{'invisible': [('activate_amended', '=',False)]}" />
+                                    <button name="button_calculate_total_qty" string="CONFIRM AMENDED" type="object" data-hotkey="w" class="btn-primary" attrs="{'invisible': [('activate_confirm_amended', '=',False)]}" />
                                 </tree>
                             </field>
                         </page>
@@ -138,9 +155,10 @@
                             <field name="quality_control_ids" mode="tree">
                                 <tree>
                                     <field name="product_id"/>
+                                    <field name="qc_manager_id"/>
                                     <field name="production_id"/>
                                     <field name="quality_state"/>
-                                      <field name="state_job" invisible="1"/>
+                                    <field name="state_job" invisible="1"/>
                                     <button name="do_pass_qc" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
                                     <button name="do_fail_qc" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
 

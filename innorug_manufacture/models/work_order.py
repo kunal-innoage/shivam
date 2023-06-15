@@ -32,6 +32,19 @@ class MrpWorkOrder(models.Model):
     job_work_lines_ids = fields.One2many("mrp.job.work","mrp_work_order_id", "Job Work")
     # default_alloted_product_ids =fields.One2many("subcontractor.alloted.product", "work_order_id", string = "Alloted Product")
     
+    
+    
+    def do_finish(self):
+     
+        _logger.info("~~~~~~3~~~~sssssssssssss~~shivvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv~~~~~~~")
+        return super(MrpWorkOrder, self).do_finish()
+    
+    
+    def record_production(self):
+     
+        _logger.info("~~~~~~3~~~~sssssssssssss~~record   hyutgtyftrtrdtrder4tetrfytbjhhshivvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv~~~~~~~")
+        return super(MrpWorkOrder, self).record_production()
+    
 
     # @api.onchange('manager_id')
     # def default_alloted_product(self):

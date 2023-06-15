@@ -1,5 +1,5 @@
 from odoo import fields, models, _,api
-from datetime import datetime
+from datetime import datetime 
 from odoo.exceptions import UserError, ValidationError, MissingError
 import logging
 _logger = logging.getLogger(__name__)
@@ -12,7 +12,8 @@ class MrpJobWork(models.Model):
     _rec_name = "product_id"
 
     name = fields.Char("Job Work")
-
+    reference_no = fields.Char(string='Order Reference', required=True,
+                          readonly=True, default=lambda self: _('New'))
     
     product_id = fields.Many2one(related="mrp_production_id.product_id", string="Product")
     bom_id = fields.Many2one(related="mrp_work_order_id.production_bom_id", string="Bill Of Material")
@@ -81,6 +82,7 @@ class MrpJobWork(models.Model):
     
     #quality control relation
     quality_control_ids = fields.One2many("mrp.quality.control","job_work_id", string="Quality Check")
+    qc_manager_id = fields.Many2one('res.partner', string="QC Manager")
     
     
 
@@ -146,6 +148,16 @@ class MrpJobWork(models.Model):
         ('stencil','Stencil'),
         ('map','Map')
         ], string=' Actual Product Size Type')
+    
+    
+    
+    @api.model
+    def create(self, vals):
+        if vals.get('reference_no', _('New')) == _('New'):
+            vals['reference_no'] = self.env['ir.sequence'].next_by_code(
+                'mrp.job.work') or _('New')
+        res = super(MrpJobWork, self).create(vals)
+        return res
 
 
 
@@ -166,7 +178,6 @@ class MrpJobWork(models.Model):
     def calculate_pending_qty(self):
         if self.total_receive_product_qty <= self.product_qty :
             self.pending__product_qty = self.product_qty - self.total_receive_product_qty 
-            # w =0
             if self.product_qty >0:
                 w = self.total_weight / self.product_qty
                 self.total__receive_weight = w * self.total_receive_product_qty
@@ -184,11 +195,17 @@ class MrpJobWork(models.Model):
         pass
 
     def button_action_for_done(self):
+        self.message_post(body= "DONE - RECEIVED")
         self.state = 'done'
         self.subcontracter_alloted_product_ids.activate_return_qty = True
         self.active_done = False
         self.subcontracter_alloted_product_ids.activate_return =False
         self.active_cancel = False
+        for rec in self.subcontracter_alloted_product_ids:
+            if not rec.activate_confirm_return :
+                pass
+            else:
+                raise UserError(_("Please confirm return Qty")) 
         pass
     
     
@@ -197,7 +214,8 @@ class MrpJobWork(models.Model):
         for rec in self.quality_control_ids:
             rec.do_pass_qc()
         today = datetime.today()
-        self.message_post(body= today, subject="QC FORCE")
+        subject="QC FORCE : "
+        self.message_post(body=subject + str(today))
         pass
 
 
@@ -205,6 +223,7 @@ class MrpJobWork(models.Model):
    
 
     def button_action_for_no_amended_qty(self):
+        self.message_post(body= "NO AMENDED QUANTITY")
         self.subcontracter_alloted_product_ids.activate_amended_qty = True
         self.subcontracter_alloted_product_ids.activate_amended = False
         self.active_no_amended =False
@@ -218,6 +237,11 @@ class MrpJobWork(models.Model):
         self.subcontracter_alloted_product_ids.activate_return  = False
         self.active_no_return = False
         self.active_done =  True
+        for rec in self.subcontracter_alloted_product_ids:
+            if not rec.activate_confirm_return :
+                pass
+            else:
+                raise UserError(_("Please confirm return Qty")) 
         pass 
 
 
@@ -250,6 +274,7 @@ class MrpJobWork(models.Model):
 
 
     def button_action_for_baazar(self):
+        self.message_post(body= "Baazar Process Activated")
         self.state = 'baazar'
         self.subcontracter_alloted_product_ids.activate_return  = True
         self.active_no_return  = True
@@ -282,6 +307,7 @@ class MrpJobWork(models.Model):
 
 
     def button_action_for_qa_process(self):
+        self.message_post(body= "QC Process Activated")
         self.state = 'qa'
         self.active_qa = True
         self.active_hide_qa = False
@@ -292,14 +318,20 @@ class MrpJobWork(models.Model):
         self.subcontracter_alloted_product_ids.activate_amended = False
         self.subcontracter_alloted_product_ids.activate_consume_qty = True
         for rec in self.subcontracter_alloted_product_ids:
-            if rec.returned_quantity == 0:
-                rec.consumed_quantity = rec.total_allot_qty
-        for job_work in self:    
+            if not rec.activate_confirm_amended :
+                if rec.returned_quantity == 0:
+                    rec.consumed_quantity = rec.total_allot_qty
+            else:
+                raise UserError(_("Please confirm Amended Qty"))      
+        for job_work in self:  
+            if not job_work.qc_manager_id:
+                 raise UserError(_("Please select QC Manager"))    
             qlty_control_id = self.env["mrp.quality.control"].create({
                 "subcontractor_id" : job_work.subcontractor_id.id,
                 "product_id" : self.product_id.id,
                 "production_id" : self.mrp_production_id.id,
                 "operation_id" : self.work_center_id.id,
+                "qc_manager_id" : self.qc_manager_id.id,
                 "job_work_id" : job_work.id
             })
             if qlty_control_id:
@@ -333,6 +365,7 @@ class MrpJobWork(models.Model):
 
     
     def button_action_for_allot_product(self):
+        self.message_post(body= str(self.mrp_work_order_id.name) + " Material Issued")
         self.state = 'allotment'
         self.activate_product = True
         self.active_hide_allot = False
@@ -399,6 +432,7 @@ class MrpJobWork(models.Model):
     ########################
 
     def cost_center_view_action_open(self):
+        self.message_post(body= "Generated Cost Center")
         if self.subcontractor_id:
             if not self.cost_center_id:
                 self.cost_center_id = self.cost_center_id.create({
@@ -434,7 +468,8 @@ class MrpJobWork(models.Model):
     #     self.state = 'release'
     #     self.active_hide_gate = False
     #     self.active_release  = True
-    #     return self.env.ref("innorug_manufacture.action_report_gate_pass_id").report_action(self)
+    #     result = self.env.ref("innorug_manufacture.action_report_gate_pass_id").report_action(self)
+    #     import pdb;pdb.set_trace()
 
 
 
@@ -479,23 +514,30 @@ class SubBomlines(models.Model):
     activate_return_qty = fields.Boolean("rrqty")
     activate_consume_qty = fields.Boolean("cqty")
     activate_amended_qty = fields.Boolean("aqty")
+    activate_confirm_amended = fields.Boolean('aca')
+    activate_confirm_return = fields.Boolean("acr")
 
 
 
     #calculate total qty
-    @api.onchange('amended_quantity')
-    def calculate_total_qty(self):
+    def button_calculate_total_qty(self):
+        self.activate_confirm_amended = False
+        self.job_work_id.active_hide_qa =True
         if self.amended_quantity > 0:
+            # self.job_work_id.message_post(body= "PROCESS QC PASS")
             self.total_allot_qty = 0
             self.total_allot_qty = self.alloted_quantity + self.amended_quantity
+            self.job_work_id.message_post(body = str(self.alloted_product_id.name) + " amended by "+ (str(self.amended_quantity) + str(self.product_uom.name)))
         
     
-    #calculate consume qty
-    @api.onchange('returned_quantity')
-    def calculate_consume_qty(self):
+
+    def button_action_for_confim_return(self):
+        self.activate_confirm_return = False
+        self.job_work_id.active_done =  True
         if self.returned_quantity > 0 and self.returned_quantity <= self.total_allot_qty:
             self.consumed_quantity = 0
             self.consumed_quantity = self.total_allot_qty - self.returned_quantity
+            self.job_work_id.message_post(body = str(self.alloted_product_id.name) + " returned by "+ (str(self.returned_quantity) + str(self.product_uom.name)))
         else:
             raise UserError(_("Please check return weight"))  
 
@@ -503,8 +545,8 @@ class SubBomlines(models.Model):
 
 
     def button_action_for_return(self):
-        self.job_work_id.active_no_return  = False 
-        self.job_work_id.active_done =  True
+        self.activate_confirm_return = True
+        # self.job_work_id.active_no_return  = False 
         self.activate_return_qty = True
         self.activate_return = False
         if self.returned_quantity == 0 :
@@ -517,14 +559,14 @@ class SubBomlines(models.Model):
 
     def button_action_for_amended(self):
         self.job_work_id.active_no_amended  = False 
-        self.job_work_id.active_hide_qa =True
         self.activate_amended_qty = True
         self.activate_amended  = False
         self.total_allot_qty = 0
+        self.activate_confirm_amended = True
         self.total_allot_qty = self.alloted_quantity + self.amended_quantity
-        if self.returned_quantity == 0 :
-            self.consumed_quantity = self.total_allot_qty
-        _logger.info("~~~~~~2~~~job_work~~~%r~~~~rec~~~----------------------------~", self.activate_consume_qty)
+        # if self.returned_quantity == 0 :
+        #     self.consumed_quantity = self.total_allot_qty
+        # _logger.info("~~~~~~2~~~job_work~~~%r~~~~rec~~~----------------------------~", self.activate_consume_qty)
         pass
     
 

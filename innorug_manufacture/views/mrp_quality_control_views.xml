@@ -22,7 +22,8 @@
         <field name="arch" type="xml">
             <form >
                 <header>
-
+                    <button name="do_pass_qc" type="object" class="btn-primary" string="Pass" data-hotkey="q" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'not in', ['none', 'fail'])] }"/>
+                    <button name="do_fail_qc" type="object" class="btn-primary" string="Fail" data-hotkey="w" attrs="{'invisible' : ['|',('state_job', 'in', ['baazar']),('quality_state', 'in', ['pass'])] }" />
                     <field name="quality_state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -34,10 +35,12 @@
                             <field name="team"/>
                         </group>
                         <group>
+                            <field name="qc_manager_id"/>
                             <field name="picking_id"/>
                             <field name="type"/>
                             <!-- <field name="quality_state"/> -->
                             <fields name="lot_id"/>
+                            <field name="state_job" invisible="1"/>
                         </group>
                     </group>
                     <field name="picture"/>
@@ -68,6 +71,17 @@
         <field name="target">new</field>
         <field name="view_id" ref="view__mrp_cost_center_form"/>
     </record> -->
+    <record id="view_mrp_quality_control_filter_id" model="ir.ui.view">
+        <field name="name">mrp.quality.control</field>
+        <field name="model">mrp.quality.control</field>
+        <field name="arch" type="xml">
+            <search string="Status">
+                <group expand="1" string="Group By">
+                    <filter string="QC Manager" name="qc_manager_id" context="{'group_by':'qc_manager_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
 
 
 

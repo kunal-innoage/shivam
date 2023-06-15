@@ -3,6 +3,7 @@
     "depends": ['mrp','sale', 'stock','product','account',"hr_contract",'mail'],
     "data": [
         "security/ir.model.access.csv",
+        "data/ir_sequenxe.xml",
         'views/work_order_view.xml',
         "views/mrp_production_views.xml",
         "views/cost_center_views.xml",
