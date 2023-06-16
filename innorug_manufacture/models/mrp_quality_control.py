@@ -47,6 +47,10 @@ class MrpQualityControl(models.Model):
     active_delayed = fields.Boolean("Delayed")
     
     
+    
+    baazar_product_line_id = fields.Many2one("mrp.baazar.product.lines", string="Baazar Product line" )
+    
+    
 
     
     

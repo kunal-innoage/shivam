@@ -34,16 +34,12 @@ class MrpWorkOrder(models.Model):
     
     
     
-    def do_finish(self):
-     
-        _logger.info("~~~~~~3~~~~sssssssssssss~~shivvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv~~~~~~~")
-        return super(MrpWorkOrder, self).do_finish()
+    # def do_finish(self):
+    #     return super(MrpWorkOrder, self).do_finish()
     
     
-    def record_production(self):
-     
-        _logger.info("~~~~~~3~~~~sssssssssssss~~record   hyutgtyftrtrdtrder4tetrfytbjhhshivvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv~~~~~~~")
-        return super(MrpWorkOrder, self).record_production()
+    # def record_production(self):
+    #     return super(MrpWorkOrder, self).record_production()
     
 
     # @api.onchange('manager_id')

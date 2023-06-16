@@ -20,3 +20,8 @@ class BomOperationComponent(models.Model):
     product_id = fields.Many2one(related="product_bom_line_id.product_id", string="Product")
     product_qty = fields.Float(related="product_bom_line_id.product_qty", string="Quantity")
     product_uom_id = fields.Many2one(related="product_id.uom_id")
+    
+    
+    
+    
+  

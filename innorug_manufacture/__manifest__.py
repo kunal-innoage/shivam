@@ -19,6 +19,7 @@
         "views/product_views.xml",
         "views/mrp_quality_control_views.xml",
         'views/mrp_menu_views.xml',
+        'views/baazar_product_lines_views.xml',
         # "views/sale_order.xml",
     ],
     'application': True,

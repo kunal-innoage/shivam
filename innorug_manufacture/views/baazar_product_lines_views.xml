@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Baazar product lines Tree -->
+    <record id="view_mrp_baazar_product_lines_tree_id" model="ir.ui.view">
+        <field name="name">Baazar Product Lines</field>
+        <field name="model">mrp.baazar.product.lines</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="mrp_production_id"/>
+                <field name="product_id"/>
+                <field name="subcontractor_id"/>
+                <field name="cost_center_id"/>
+                <field name="manager_id"/>
+                <field name="receive_product_qty"/>
+                <field name="accepted_qty"/>
+                <field name="rejected_qty"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+    <!-- Baazar productc lines Form -->
+    <record id="view__mrp_baazar_product_lines_form_id" model="ir.ui.view">
+        <field name="name">Baazar Product Lines</field>
+        <field name="model">mrp.baazar.product.lines</field>
+        <field name="arch" type="xml">
+            <form >
+                <header>
+                    <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done'])]}"/>
+                    <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done'])]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="design"/>
+                            <field name="size"/>
+                            <field name="shape"/>
+                            <field name="size_type"/>
+                            <field name="pending_qty"/>
+                            <field name="receive_product_qty"/>
+                            <field name="accepted_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done'])]}"/>
+                            <field name="rejected_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done'])]}"/>
+                        </group>
+                        <group>
+                            <field name="subcontractor_id"/>
+                            <field name="manager_id"/>
+                            <field name="mrp_production_id"/>
+                             <field name="quality_control_id" invisible = "1"/>
+                             <field name="quality_control_id" attrs="{'invisible': [('quality_control_id', '=',False)]}"/>
+                        </group>
+                    </group>
+
+                    <group attrs="{'invisible': [('state', 'not in',['process', 'done'])]}">
+                        <group>
+                            <h5>Original Details :</h5>
+
+                            <field name="lenght_fraction" widget="float" readonly="1"/>
+                            <label for="area"/>
+                            <div class="o_row">
+                                <field name="area" widget="float" readonly="1"/>
+                                <span> square yard</span>
+                            </div>
+                            <label for="perimeter"/>
+                            <div class="o_row">
+                                <field name="perimeter" widget="float" readonly="1"/>
+                                <span>m</span>
+                            </div>
+                        </group>
+                        <group>
+                            <h5>Actual Details :</h5>
+                            <field name="actual_design" invisible="1"/>
+                            <label for="actual_weight"/>
+                            <div class="o_row">
+                                <field name="actual_weight" widget="float"/>
+                                <span>KG</span>
+                            </div>
+                            <label for="actual_lenght_fraction"/>
+                            <div class="o_row">
+                                <field name="actual_lenght_fraction" widget="float"/>
+                                <span></span>
+                            </div>
+                            <label for="actual_area"/>
+                            <div class="o_row">
+                                <field name="actual_area" widget="float"/>
+                                <span> square yard</span>
+                            </div>
+                            <label for="actual_perimeter"/>
+                            <div class="o_row">
+                                <field name="actual_perimeter" widget="float"/>
+                                <span>m</span>
+                            </div>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+    <!-- action through python module "work order" -->
+    <!-- <record model="ir.actions.act_window" id="mrp_cost_centre_action_id">
+        <field name="name">Cost Center</field>
+        <field name="res_model">mrp.cost.center</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view__mrp_cost_center_form"/>
+    </record> -->
+
+
+
+
+    <record id="action_mrp_baazar_product_lines_id" model="ir.actions.act_window">
+        <field name="name">Baazar Product Lines</field>
+        <field name="res_model">mrp.baazar.product.lines</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo> 

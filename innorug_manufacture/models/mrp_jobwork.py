@@ -85,6 +85,10 @@ class MrpJobWork(models.Model):
     qc_manager_id = fields.Many2one('res.partner', string="QC Manager")
     
     
+    #Baazar Product Lines relation
+    baazar_product_lines_ids = fields.One2many("mrp.baazar.product.lines","job_work_id", string="Baazar product Details")
+    
+    
 
 
     
@@ -109,8 +113,8 @@ class MrpJobWork(models.Model):
     #Baazar Details for receive product
     baazar_details = fields.Char("Bazar Details")
     total_weight = fields.Float("Total Weight")
-    total_receive_product_qty = fields.Integer("Total Receive Quantity", tracking = True)
-    pending__product_qty = fields.Integer("Pending Quantity") 
+    total_receive_product_qty = fields.Integer("Total Received Quantity", tracking = True)
+    pending_product_qty = fields.Integer("Pending Quantity") 
     total__receive_weight = fields.Float("Receive Weight") 
 
 
@@ -151,6 +155,8 @@ class MrpJobWork(models.Model):
     
     
     
+    
+    
     @api.model
     def create(self, vals):
         if vals.get('reference_no', _('New')) == _('New'):
@@ -176,17 +182,25 @@ class MrpJobWork(models.Model):
 
     @api.onchange('total_receive_product_qty')
     def calculate_pending_qty(self):
+        self.pending_product_qty = 0
         if self.total_receive_product_qty <= self.product_qty :
-            self.pending__product_qty = self.product_qty - self.total_receive_product_qty 
+            self.pending_product_qty = self.product_qty - self.total_receive_product_qty 
             if self.product_qty >0:
                 w = self.total_weight / self.product_qty
                 self.total__receive_weight = w * self.total_receive_product_qty
-            if self.pending__product_qty > 0 :
+            if self.pending_product_qty > 0 :
                 self.active_report_back_order = True
             else:
                 self.active_report_back_order = False
         else:
             raise UserError(_("Please enter valid receive qty "))  
+        
+        
+    def calculate_total_receive_product_qty(self):
+        _logger.info("~~~~~~~122222222222222222222222222222222222~~~~~~~~~~~~~")
+        self.total_receive_product_qty = 0
+        for rec in self.baazar_product_lines_ids:
+            self.total_receive_product_qty += rec.accepted_qty
 
 
 
@@ -274,6 +288,7 @@ class MrpJobWork(models.Model):
 
 
     def button_action_for_baazar(self):
+        self.pending_product_qty = self.product_qty
         self.message_post(body= "Baazar Process Activated")
         self.state = 'baazar'
         self.subcontracter_alloted_product_ids.activate_return  = True
