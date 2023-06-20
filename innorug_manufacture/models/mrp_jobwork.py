@@ -115,7 +115,7 @@ class MrpJobWork(models.Model):
     total_weight = fields.Float("Total Weight")
     total_receive_product_qty = fields.Integer("Total Received Quantity", tracking = True)
     pending_product_qty = fields.Integer("Pending Quantity") 
-    total__receive_weight = fields.Float("Receive Weight") 
+    total_receive_weight = fields.Float("Expected Receive Weight") 
 
 
     #original details of product
@@ -180,14 +180,14 @@ class MrpJobWork(models.Model):
 
 
 
-    @api.onchange('total_receive_product_qty')
+    # @api.onchange('total_receive_product_qty')
     def calculate_pending_qty(self):
         self.pending_product_qty = 0
         if self.total_receive_product_qty <= self.product_qty :
             self.pending_product_qty = self.product_qty - self.total_receive_product_qty 
             if self.product_qty >0:
                 w = self.total_weight / self.product_qty
-                self.total__receive_weight = w * self.total_receive_product_qty
+                self.total_receive_weight = w * self.total_receive_product_qty
             if self.pending_product_qty > 0 :
                 self.active_report_back_order = True
             else:
@@ -196,11 +196,34 @@ class MrpJobWork(models.Model):
             raise UserError(_("Please enter valid receive qty "))  
         
         
+                    
+        
+    @api.onchange('baazar_product_lines_ids')
+    def get_recieve_details(self):
+        for work_order in self:
+            t = 0
+            last_job_order = False
+            for rec in work_order.baazar_product_lines_ids:
+                t =  rec.receive_product_qty
+                last_job_order = rec
+            if t > self.pending_product_qty:
+                if last_job_order:
+                    last_job_order.unlink()
+           
+    
+    
+    
+    
+        
+        
+    # @api.onchange('baazar_product_lines_ids')   
     def calculate_total_receive_product_qty(self):
-        _logger.info("~~~~~~~122222222222222222222222222222222222~~~~~~~~~~~~~")
         self.total_receive_product_qty = 0
         for rec in self.baazar_product_lines_ids:
             self.total_receive_product_qty += rec.accepted_qty
+        self.pending_product_qty = 0
+        self.pending_product_qty = self.product_qty - self.total_receive_product_qty 
+        
 
 
 

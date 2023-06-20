@@ -22,12 +22,18 @@ class CostCenter(models.Model):
     job_work_id = fields.Many2one("mrp.job.work", string="Job Work")
 
     subcontractor_id = fields.Many2one(related="job_work_id.subcontractor_id",string="Subcontractor")
+    mrp_production_id = fields.Many2one(related="job_work_id.mrp_production_id", string="MRP Production")
+    
+    
+    work_center_id = fields.Many2one(related="job_work_id.work_center_id",string="Work Center")
     product_id =fields.Many2one(related="job_work_id.product_id", string="Product")
     product_qty = fields.Float(related="job_work_id.product_qty", string="Allotment Qty(Units)")
-    work_center_id = fields.Many2one(related="job_work_id.work_center_id",string="Work Center")
+    design = fields.Char(related = "job_work_id.design", string="Design", readonly="1")
+    area = fields.Float(related="job_work_id.area", string="Area", readonly="1")
+    size = fields.Char(related="job_work_id.size", string="Product Size Name", readonly="1")
+    shape = fields.Char(related="job_work_id.shape", string="Shape", readonly="1")
+    size_type = fields.Selection(related="job_work_id.size_type", string='Product Size Type', readonly="1")
 
-
-    mrp_production_id = fields.Many2one(related="job_work_id.mrp_production_id", string="MRP Production")
 
 
     issue_date = fields.Date(related="job_work_id.issue_date", string='Issued Date')
@@ -36,7 +42,11 @@ class CostCenter(models.Model):
 
     time_incentive = fields.Float("Time Incentive")
     time_penalities = fields.Float("Time Penality")
-    fragments = fields.Char("Fragments")
+    fragments = fields.Float("Fragments")
+    fragments_penality = fields.Float("Fragments Penalities")
+    
+    cost_per_yard = fields.Float("Cost Per Yard")
+    
 
   
 

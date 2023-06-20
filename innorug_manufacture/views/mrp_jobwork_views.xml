@@ -70,9 +70,9 @@
                                 <field name="total_weight" widget="float" readonly="1"/>
                                 <span>KG</span>
                             </div>
-                            <label for="total__receive_weight" string="Total Expected Received Weight" attrs="{'invisible': [('active_baazar_page', '=',False)]}" />
+                            <label for="total_receive_weight" string="Total Expected Received Weight" attrs="{'invisible': [('active_baazar_page', '=',False)]}" />
                             <div class="o_row" attrs="{'invisible': [('active_baazar_page', '=',False)]}">
-                                <field name="total__receive_weight" widget="float"/>
+                                <field name="total_receive_weight" widget="float"/>
                                 <span>KG</span>
                             </div>
                         </group>
@@ -183,15 +183,19 @@
                         <page string="Baazar" attrs="{'invisible': [('active_baazar_page', '=',False)]}">
                             <form>
                                 <field name="baazar_product_lines_ids" mode="tree">
-                                    <tree>
+                                    <tree editable="buttom"> 
                                         <field name="product_id"/>
-                                        <field name="receive_product_qty"/>
-                                        <field name="accepted_qty"/>
-                                        <field name="rejected_qty"/>
-                                        <field name="state"/>
-                                        <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done'])]}"/>
-                                        <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done'])]}"/>
+                                        <field name="receive_product_qty" attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}"/>
+                                        <field name="accepted_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}"/>
+                                        <field name="rejected_qty" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}" />
+                                        <field name="state" readonly='1'/>
+                                        <!-- <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done'])]}"/>
+                                        <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done'])]}"/> -->
+                                         <button name="do_open_wizards" type="object" class="btn-primary" icon="fa-external-link" attrs="{'invisible': [('state', 'in',['done',])]}"  />
+                                          <button name="now_verify" type="object" class="btn-primary" string="Now Verify" attrs="{'invisible': [('state', 'in',['draft','process', 'verify'])]}" />
                                     </tree>
+
+                                    
                                 </field>
 
                                 <!-- <h5>SKU's Quantity Received</h5>
@@ -203,9 +207,9 @@
                                             <field name="total_receive_product_qty" widget="float"/>
                                             <span>QTY</span>
                                         </div>
-                                        <label for="total__receive_weight" string="Total Expected Received Weight"/>
+                                        <label for="total_receive_weight" string="Total Expected Received Weight"/>
                                         <div class="o_row">
-                                            <field name="total__receive_weight" widget="float"/>
+                                            <field name="total_receive_weight" widget="float"/>
                                             <span>KG</span>
                                         </div>
                                     </group>
@@ -217,6 +221,7 @@
                                         </div>
                                     </group>
                                 </group> -->
+                                
                                 <group invisible="1">
                                     <group>
                                         <h5>Original Details :</h5>

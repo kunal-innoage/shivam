@@ -24,8 +24,9 @@ class BaazaProductLines(models.Model):
     state = fields.Selection([
         ('draft','DRAFT'),
         ('process','PROCESS'),
-        ('done','Done'),
-        ], string='Status', default='draft')
+        ('done','WAITING FOR VERIFY'),
+        ('verify','VERIFIED'),
+        ], string='Status',  default='draft')
 
 
     mrp_production_id = fields.Many2one(related="job_work_id.mrp_production_id", string="Production")
@@ -64,17 +65,52 @@ class BaazaProductLines(models.Model):
         ], string=' Actual Product Size Type')
     
     
+    total_receive_weight = fields.Float("Exoected Receive Weight") 
+    
+    
+    
     def do_confirm(self):
         for baazar_line in self:
             baazar_line.state = 'process'
+        return self.do_open_wizards()
         pass
     
     def do_process(self):
+        self.job_work_id.state = 'waiting_baazar'
+        self.job_work_id.state = 'baazar'
         self.state ="done"
-        _logger.info("~~~~~~1111111111111111111111111111111~1~~~~~%r~~~~~~~~")
-        return self.job_work_id.calculate_total_receive_product_qty()
-    def do_done(self):
+        self.rejected_qty = 0
+        self.rejected_qty =  self.receive_product_qty - self.accepted_qty
+        self.total_receive_weight = 0
+        if self.job_work_id.product_qty >0:
+                w = self.job_work_id.total_weight / self.job_work_id.product_qty
+                self.total_receive_weight = w * self.accepted_qty
+        return  self.do_open_wizards()
+    
+    
+    
+
+    
+    
+    def do_open_wizards(self):
+        self.ensure_one() 
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("Product Lines"),
+            'view_mode': 'form',
+            # 'view_ids': [(self.env.ref('innorug_manufacture.view__mrp_job_work_form')).id],
+            'res_model': 'mrp.baazar.product.lines',
+            'res_id': self.id,
+            "target" : "new",
+        }
+ 
         pass
+    
+    
+    def now_verify(self):
+        self.state =  'verify'
+        return self.job_work_id.calculate_total_receive_product_qty()  
+        
 
 
    

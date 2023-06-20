@@ -29,8 +29,8 @@
         <field name="arch" type="xml">
             <form >
                 <header>
-                    <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done'])]}"/>
-                    <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done'])]}"/>
+                    <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done','verify'])]}"/>
+                    <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done','verify'])]}"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -40,11 +40,9 @@
                             <field name="design"/>
                             <field name="size"/>
                             <field name="shape"/>
-                            <field name="size_type"/>
-                            <field name="pending_qty"/>
-                            <field name="receive_product_qty"/>
-                            <field name="accepted_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done'])]}"/>
-                            <field name="rejected_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done'])]}"/>
+                            <field name="receive_product_qty"  attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}" />
+                            <field name="accepted_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
+                            <field name="rejected_qty"  attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
                         </group>
                         <group>
                             <field name="subcontractor_id"/>
@@ -52,12 +50,15 @@
                             <field name="mrp_production_id"/>
                              <field name="quality_control_id" invisible = "1"/>
                              <field name="quality_control_id" attrs="{'invisible': [('quality_control_id', '=',False)]}"/>
+                            <field name="size_type"/>
+                            <field name="pending_qty"/>
+                             <field name="total_receive_weight" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}"/>
                         </group>
                     </group>
 
-                    <group attrs="{'invisible': [('state', 'not in',['process', 'done'])]}">
+                    <group attrs="{'invisible': [('state', 'not in',[ 'done','verify'])]}">
                         <group>
-                            <h5>Original Details :</h5>
+                            <h5>Verify Details :</h5>
 
                             <field name="lenght_fraction" widget="float" readonly="1"/>
                             <label for="area"/>
@@ -79,7 +80,7 @@
                                 <field name="actual_weight" widget="float"/>
                                 <span>KG</span>
                             </div>
-                            <label for="actual_lenght_fraction"/>
+                            <!-- <label for="actual_lenght_fraction"/>
                             <div class="o_row">
                                 <field name="actual_lenght_fraction" widget="float"/>
                                 <span></span>
@@ -93,7 +94,7 @@
                             <div class="o_row">
                                 <field name="actual_perimeter" widget="float"/>
                                 <span>m</span>
-                            </div>
+                            </div> -->
                         </group>
                     </group>
                 </sheet>

@@ -67,7 +67,7 @@
                 <xpath expr="//notebook" position="inside">
                     <page string="Job Work" name="job_work_lines_ids">
                         <field name="job_work_lines_ids" mode="tree">
-                            <tree create='true'>
+                            <tree create='true' editable="buttom">
                                 <field name="subcontractor_id"/>
                                 <!-- <field name="product_id"/> -->
                                 <field name="issue_date" />

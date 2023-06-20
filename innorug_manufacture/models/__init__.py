@@ -11,6 +11,7 @@ from . import bom_opration_components
 from . import product
 from . import mrp_quality_control
 from . import baazar_product_lines
+from . import mro_res_partner
 
 
 

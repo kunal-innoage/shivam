@@ -29,26 +29,44 @@
                         <field name="issue_date"/>
                         <field name="expected_received_date"/>
                     </div>
-                    <group col="4">
-                        <field name="work_center_id"/>
-                        <field name="subcontractor_id"/>
-                        <field name="product_qty"/>
-                        <label for="time_incentive"/>
-                        <div class="o_row">
-                            <field name="time_incentive" widget="float"/>
-                            <span>INR</span>
-                        </div>
-                        <label for="time_penalities"/>
-                        <div class="o_row">
-                            <field name="time_penalities" widget="float"/>
-                            <span>INR</span>
-                        </div>
-                        <field name="fragments"/>
+                    <group>
+                        <group>
+                            <field name="work_center_id"/>
+                            <field name="subcontractor_id"/>
+                            <field name="product_qty"/>
+                            <label for="time_incentive"/>
+                            <div class="o_row">
+                                <field name="time_incentive" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                            <label for="fragments"/>
+                            <div class="o_row">
+                                <field name="fragments" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="mrp_production_id" string= "Production"/>
+                            <field name="area"/>
+                            <field name="size_type"/>
+                            <label for="cost_per_yard"/>
+                            <div class="o_row">
+                                <field name="cost_per_yard" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                            <label for="fragments_penality"/>
+                            <div class="o_row">
+                                <field name="fragments_penality" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                        </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
+
+
 
 
 

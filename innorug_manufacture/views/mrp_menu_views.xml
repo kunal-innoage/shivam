@@ -20,9 +20,9 @@
     sequence="2"/>
 
 
-    <!-- <menuitem id="menu_cost_center_id" 
+    <menuitem id="menu_cost_center_id" 
     name="Cost Center" 
     parent="menu_mrp_bazar_id" 
     action="action_mrp_cost_center_id" 
-    sequence="1"/>  -->
+    sequence="1"/> 
 </odoo> 
