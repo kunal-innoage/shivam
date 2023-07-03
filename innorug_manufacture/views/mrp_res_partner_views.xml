@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_res_partner_id" model="ir.ui.view">
+        <field name="name">res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <label for="cost_per_yard"/>
+                    <div class="o_row">
+                        <field name="cost_per_yard"/>
+                        <span>INR</span>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

@@ -9,7 +9,7 @@
     name="Job Work" 
     parent="menu_mrp_bazar_id" 
     action="action_mrp_job_work_id" 
-    sequence="1"/>
+    sequence="8"/>
 
 
 
@@ -20,9 +20,46 @@
     sequence="2"/>
 
 
-    <menuitem id="menu_cost_center_id" 
+    <menuitem id="menu_mrp_cost_center_id" 
     name="Cost Center" 
     parent="menu_mrp_bazar_id" 
     action="action_mrp_cost_center_id" 
     sequence="1"/> 
+
+
+ <menuitem id="menu_cost_center_lines_id" 
+    name="Cost Center Line" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_cost_center_line_id" 
+    sequence="3"/>
+
+
+<menuitem id="menu_mrp_jobwork_allotement_id" 
+    name="Job Work Allotement" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_jobwork_allotements_id" 
+    sequence="20"/>
+
+
+<menuitem id="menu_mrp_branch_id" 
+    name="Main Job Work" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_main_job_works_id" 
+    sequence="19"/>
+
+
+<menuitem id="menu_mrp_weaving_allotement_id" 
+    name="Weaving Branch" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_weaving_branch_id" 
+    sequence="11"/>
+
+    
+<menuitem id="menu_action_mrp_main_cost_center_id" 
+    name="Main Cost Center" 
+    parent="menu_mrp_bazar_id" 
+    action="action_mrp_main_cost_center_id" 
+    sequence="150"/>
+
+
 </odoo> 

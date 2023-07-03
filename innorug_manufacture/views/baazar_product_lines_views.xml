@@ -37,22 +37,49 @@
                     <group>
                         <group>
                             <field name="product_id"/>
+                            <field name="date"/>
                             <field name="design"/>
                             <field name="size"/>
                             <field name="shape"/>
-                            <field name="receive_product_qty"  attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}" />
-                            <field name="accepted_qty"  attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
-                            <field name="rejected_qty"  attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
+                            <!-- <field name="receive_product_qty" attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}" />
+                            <field name="accepted_qty" attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
+                            <field name="rejected_qty" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
+                           -->
+
+                            <label for="receive_product_qty" attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}" />
+                            <div class="o_row" attrs="{'readonly': [('state', 'in',['process', 'done','verify'])]}">
+                                <field name="receive_product_qty" />
+                                <span> Ubits</span>
+                            </div>
+                            <label for="accepted_qty" attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}" />
+                            <div class="o_row" attrs="{'invisible': [('state', 'not in',['process', 'done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}">
+                                <field name="accepted_qty" />
+                                <span> Ubits</span>
+                            </div>
+                            <label for="rejected_qty" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}"/>
+                            <div class="o_row" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['done','verify'])]}">
+                                <field name="rejected_qty"/>
+                                <span> Units</span>
+                            </div>
                         </group>
                         <group>
                             <field name="subcontractor_id"/>
                             <field name="manager_id"/>
                             <field name="mrp_production_id"/>
-                             <field name="quality_control_id" invisible = "1"/>
-                             <field name="quality_control_id" attrs="{'invisible': [('quality_control_id', '=',False)]}"/>
+                            <field name="quality_control_id" invisible = "1"/>
+                            <field name="quality_control_id" attrs="{'invisible': [('quality_control_id', '=',False)]}"/>
                             <field name="size_type"/>
-                            <field name="pending_qty"/>
-                             <field name="total_receive_weight" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}"/>
+                            <label for="pending_qty" />
+                            <div class="o_row">
+                                <field name="pending_qty"/>
+                                <span> Units</span>
+                            </div>
+                            <!-- <field name="total_receive_weight" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}"/> -->
+                            <label for="total_receive_weight" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}"/>
+                            <div class="o_row" attrs="{'invisible': [('state', 'not in',['done','verify'])], 'readonly': [('state', 'in',['process', 'done','verify'])]}">
+                                <field name="total_receive_weight" widget="float" readonly="1"/>
+                                <span> KG</span>
+                            </div>
                         </group>
                     </group>
 

@@ -28,7 +28,7 @@
                 <header>
                     <button name="button_action_for_validate" string="CONFIRM" type="object" class="btn-primary" states ="draft" />
                     <button name="button_action_for_allot_product" string="ALLOTE COMPONENTS" type="object" class="btn-primary" attrs="{'invisible': [('active_hide_allot', '=',False)]}" />
-                    <button name="button_action_for_cost_center" string="SET COST" type="object" class="btn-primary" attrs="{'invisible': [('active_hide_cost', '=',False)]}" />
+                    <button name="button_action_for_cost_center" string="COST CENTER" type="object" class="btn-primary" attrs="{'invisible': [('active_hide_cost', '=',False)]}" />
                     <button name="button_action_for_qa_process" string="QA PROCESS" type="object" class="btn-primary" attrs="{'invisible': [('active_hide_qa', '=',False)]}" />
                     <button name="button_action_for_release" string="RELEASE" type="object" class="btn-primary" attrs="{'invisible': [('active_release', '=',False)]}" />
                     <button name="button_action_for_baazar" string="BAAZAR" type="object" class="btn-primary" attrs="{'invisible': [('active_baazar', '=',False)]}" />
@@ -40,11 +40,11 @@
                     <field name="state" widget="statusbar" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received,cancel" />
                 </header>
                 <sheet>
-                    <!-- <div class="oe_title">
+                    <div class="oe_title">
                         <h1>
-                            <field name="reference_no" placeholder="Manufacturing Reference" nolabel="1"/>
+                            <field name="name" placeholder="JOB WORK Reference" nolabel="1"/>
                         </h1>
-                    </div> -->
+                    </div>
                     <group>
                         <group>
                             <field name="product_id" string="Product"/>
@@ -54,17 +54,18 @@
                             <label for="total_receive_product_qty" attrs="{'invisible': [('active_baazar_page', '=',False)]}" />
                             <div class="o_row" attrs="{'invisible': [('active_baazar_page', '=',False)]}">
                                 <field name="total_receive_product_qty" widget="float"/>
-                                <span>QTY</span>
+                                <span>Ubits</span>
                             </div>
                             <label for="pending_product_qty" attrs="{'invisible': [('active_baazar_page', '=',False)]}" />
                             <div class="o_row" attrs="{'invisible': [('active_baazar_page', '=',False)]}">
                                 <field name="pending_product_qty" widget="float"/>
-                                <span>QTY</span>
+                                <span>Units</span>
                             </div>
                         </group>
                         <group>
                             <field name="subcontractor_id" attrs="{'readonly' : [('state', 'in', ['qa','waiting_baazar','baazar','fqa','done','allotment','waiting_baazar','release'])] }" />
                             <field name="manager_id"/>
+                             <field name="cost_center_id" attrs="{'invisible': [('activate_inr', '=',False)]}"/>
                             <label for="total_weight" string="Total Expected Weight" attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}"/>
                             <div class="o_row" attrs="{'invisible': [('active_baazar_page', '=',False)], 'readonly': [('active_baazar_page', '=',False)]}">
                                 <field name="total_weight" widget="float" readonly="1"/>
@@ -120,7 +121,7 @@
                             <field name="active_done" invisible="1"/>
                             <field name="active_cancel" invisible="1"/>
                             <field name="active_force_qa" invisible="1"/>
-                            <field name="reference_no" invisible="1" nolabel="1"/>
+                            <!-- <field name="reference_no" invisible="1" nolabel="1"/> -->
 
                         </group>
                     </div>
@@ -155,7 +156,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Cost Center" name="cost_center_ids" attrs="{'invisible': [('activate_inr', '=',False)]}">
+                        <!-- <page string="Cost Center" name="cost_center_ids" attrs="{'invisible': [('activate_inr', '=',False)]}">
                             <field name="cost_center_ids" mode="tree">
                                 <tree>
                                     <field name="product_id"/>
@@ -165,7 +166,7 @@
                                     <field name="fragments"/>
                                 </tree>
                             </field>
-                        </page>
+                        </page> -->
                         <page string="Quality Control" name="quality_control_ids" attrs="{'invisible': [('active_qa', '=',False)]}">
                             <field name="quality_control_ids" mode="tree">
                                 <tree>
@@ -192,7 +193,7 @@
                                         <!-- <button name="do_confirm" type="object" class="btn-primary" string="Confirm" attrs="{'invisible': [('state', 'in',['process', 'done'])]}"/>
                                         <button name="do_process" type="object" class="btn-primary" string="Validate" attrs="{'invisible': [('state', 'in',['draft', 'done'])]}"/> -->
                                          <button name="do_open_wizards" type="object" class="btn-primary" icon="fa-external-link" attrs="{'invisible': [('state', 'in',['done',])]}"  />
-                                          <button name="now_verify" type="object" class="btn-primary" string="Now Verify" attrs="{'invisible': [('state', 'in',['draft','process', 'verify'])]}" />
+                                          <button name="now_verify" type="object" class="btn-primary" string="Verify" attrs="{'invisible': [('state', 'in',['draft','process', 'verify'])]}" />
                                     </tree>
 
                                     

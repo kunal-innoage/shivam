@@ -9,17 +9,22 @@ class MrpJobWork(models.Model):
     _name = "mrp.job.work"
     _description = 'Job Work'
     _inherit = ['mail.thread','mail.activity.mixin']
-    _rec_name = "product_id"
+    _rec_name = "name"
 
-    name = fields.Char("Job Work")
-    reference_no = fields.Char(string='Order Reference', required=True,
+    
+    name = fields.Char(string='Order Reference', required=True,
                           readonly=True, default=lambda self: _('New'))
+    # reference_no = fields.Char(string='Order Reference', required=True,
+    #                       readonly=True, default=lambda self: _('New'))
+    
+    original_product_qty = fields.Float("Original Product Qty")  # use for job work allotement
     
     product_id = fields.Many2one(related="mrp_production_id.product_id", string="Product")
     bom_id = fields.Many2one(related="mrp_work_order_id.production_bom_id", string="Bill Of Material")
     
     product_qty = fields.Float("Quantity(Units)")
     qty_production = fields.Float('Original Production Quantity', readonly=True, related='mrp_production_id.product_qty')
+    alloted_qty_production = fields.Float('Alloted Production Quantity', readonly=True, related='mrp_production_id.product_qty')
     remaining_qty = fields.Float(string="Remaining Quantity", default= 0.0, tracking = True)
 
     mrp_work_order_id = fields.Many2one("mrp.workorder", "Work Order")
@@ -30,13 +35,24 @@ class MrpJobWork(models.Model):
 
     subcontractor_id = fields.Many2one('res.partner', string='Subcontractors', tracking=True)
     cost_center_id = fields.Many2one("mrp.cost.center", "Cost Center")
-
+    
+    main_jobwork_id = fields.Many2one("main.jobwork", string= "Main Job Work")
+    
 
 
 
     #o2msubcontracter_alloted_product_ids
     subcontracter_alloted_product_ids = fields.One2many("subcontractor.alloted.product", "job_work_id", "Alloted Material")
 
+
+    division = fields.Selection([
+        ('kelim','KELIM'),
+        ('knotted','KNOTTED'),
+        ('main','MAIN'),
+        ('sample','SAMPLE'),
+        ('shag','SHAG'),
+        ('tufted','TUFTED')
+        ], string='Division')
 
 
 
@@ -69,6 +85,11 @@ class MrpJobWork(models.Model):
     active_done_state = fields.Boolean("Active Done")
     active_cancel = fields.Boolean("cancel")
     active_force_qa = fields.Boolean("force")
+    active_qty_cnf = fields.Boolean("cnf")
+    active_qty_add = fields.Boolean("cnf")
+    active_qty_product = fields.Boolean("act")
+    active_components_allote = fields.Boolean("line")
+    active_org_qty_product = fields.Boolean("Org Qty")
 
 
     #Gate Pass
@@ -77,7 +98,7 @@ class MrpJobWork(models.Model):
     remarks =fields.Text( string="Remarks")
 
 
- 
+    jobwork_allotment_id = fields.Many2one("jobwork.allotment", "Job work allotement")
     
     
     #quality control relation
@@ -154,13 +175,64 @@ class MrpJobWork(models.Model):
         ], string=' Actual Product Size Type')
     
     
+    def add_qty(self):
+        self.active_qty_product = True
+        self.active_qty_add = False
+        self.active_qty_cnf = True
+        self.main_jobwork_id.active_sub = True 
+        # return self.get_action_main_branch()
     
+    
+    def confirm_qty(self):
+        if self.product_qty > self.original_product_qty:
+            raise UserError(_("Max Alloted Qty "))   
+        self.active_qty_cnf = False
+        self.active_org_qty_product = False
+        
+        return  self.calculate_remaining_qty()
+    
+    
+    
+    def calculate_remaining_qty(self):
+        job_allote_obj =self.env["jobwork.allotment"]  
+        if self.jobwork_allotment_id:
+            job_allote_id = job_allote_obj.search([('id','=',self.jobwork_allotment_id.id)])
+            if job_allote_id:
+                    job_allote_id.remaining_product_qty = job_allote_id.remaining_product_qty - self.product_qty
+                    job_allote_id.alloted_product_qty += self.product_qty
+                    if job_allote_id.alloted_product_qty == job_allote_id.product_qty:
+                        job_allote_id.allotment = "full"  
+                    elif(job_allote_id.alloted_product_qty > 0 and job_allote_id.alloted_product_qty < job_allote_id.product_qty):
+                         job_allote_id.allotment = "partial"
+                    else:
+                        job_allote_id.allotment = "to_do"  
+                     
+        # return self.get_action_main_branch()
+    
+    def button_action_for_open_job_work(self):
+        return self.action_view_allotment_job_work()
+                
+                
+                
+                
+                
+    def get_action_main_branch(self):   # not use this action     
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("Main Job Work"),
+            'view_mode': 'form',
+            'res_model': 'main.jobwork',
+            'res_id': self.main_jobwork_id.id,
+            "target" : "new",
+        }   
+        
+        
     
     
     @api.model
     def create(self, vals):
-        if vals.get('reference_no', _('New')) == _('New'):
-            vals['reference_no'] = self.env['ir.sequence'].next_by_code(
+        if vals.get('name', _('New')) == _('New'):
+            vals['name'] = self.env['ir.sequence'].next_by_code(
                 'mrp.job.work') or _('New')
         res = super(MrpJobWork, self).create(vals)
         return res
@@ -223,6 +295,10 @@ class MrpJobWork(models.Model):
             self.total_receive_product_qty += rec.accepted_qty
         self.pending_product_qty = 0
         self.pending_product_qty = self.product_qty - self.total_receive_product_qty 
+        self.total_receive_weight = 0
+        if self.product_qty >0:
+                w = self.total_weight / self.product_qty
+                self.total_receive_weight = w * self.total_receive_product_qty
         
 
 
@@ -338,6 +414,26 @@ class MrpJobWork(models.Model):
         self.subcontracter_alloted_product_ids.activate_amended = True
         self.active_no_amended = True
         self.active_release  = False
+        # for rec in self.mrp_work_order_id.job_work_lines_ids:
+        #     if rec.subcontractor_id.id == self.subcontractor_id.id:
+        #          _logger.info("~~~~~~2~~~job_work~~~%r~~~~rec~~~-----------------recccccccccccccccccccccccccccccc---ee--------~", rec.subcontracter_alloted_product_ids)
+        #          for line in  rec.subcontracter_alloted_product_ids:
+        #             product_line_id = self.env["subcontractor.alloted.product"].create({   #for cost line code
+        #                 "alloted_product_id" : line.alloted_product_id.id,
+        #                 "alloted_quantity" : line.alloted_quantity,
+        #                 "amended_quantity" : line.amended_quantity,
+        #                 "consumed_quantity": line.consumed_quantity,
+        #                 "returned_quantity": line.returned_quantity,
+        #                 'total_allot_qty' :  line.total_allot_qty,
+        #                 'product_uom' : line.product_uom.id,
+        #                 "job_work_id": self.id,
+        #             })
+                    # if product_line_id:
+                    #     self.cost_center_id.product_allotement_ids +=  product_line_id  
+                    
+                
+            
+        
         
         
 
@@ -403,6 +499,11 @@ class MrpJobWork(models.Model):
 
     
     def button_action_for_allot_product(self):
+        _logger.info("~~~~~~~ jobwork_allotment_id~~~%r~~~~~~~~",self.jobwork_allotment_id)
+        
+        if  self.active_qty_cnf ==  True:
+            raise UserError(_("Please confirm Qty"))
+        self.active_org_qty_product = False
         self.message_post(body= str(self.mrp_work_order_id.name) + " Material Issued")
         self.state = 'allotment'
         self.activate_product = True
@@ -453,7 +554,7 @@ class MrpJobWork(models.Model):
     # Cost Center View Action
     ########################
 
-    def view_cost_centre_action(self):
+    def action_view_cost_center_form(self):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
@@ -461,7 +562,7 @@ class MrpJobWork(models.Model):
             'name': _("Cost center"),
             'view_mode': 'form',
             'res_model': 'mrp.cost.center',
-            "target" : "new",
+            "target" : "current",
         }
 
 
@@ -496,7 +597,8 @@ class MrpJobWork(models.Model):
                         self.cost_center_id.total_day  = self.total_day      
                 else:
                     self.cost_center_id.work_center_id = self.id
-        return self.action_view_allotment_job_work()
+        # return self.action_view_allotment_job_work()
+        # return self.action_view_cost_center_form()
 
 
         
@@ -540,10 +642,13 @@ class SubBomlines(models.Model):
     product_uom =  fields.Many2one("uom.uom",string="UOM")
 
     job_work_id = fields.Many2one("mrp.job.work", "Job Work", readonly="1", invisible="1")
+    main_job_work_id = fields.Many2one("main.jobwork", "Main Job Work")
     state = fields.Selection(related="job_work_id.state")
 
 
     # work_order_id = fields.Many2one("mrp.workorder", "Work Order")
+    
+    cost_center_id = fields.Many2one("mrp.cost.center", string="Cost Center")
 
     #Boolean fields details 
     activate_return = fields.Boolean("return")

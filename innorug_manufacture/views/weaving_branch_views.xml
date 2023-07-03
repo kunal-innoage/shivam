@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Branch Tree -->
+    <record id="view_mrp_weaving_branch_tree" model="ir.ui.view">
+        <field name="name">Weaving Branch</field>
+        <field name="model">weaving.branch</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name = "mo_order_ids"/>
+                <field name="division"/>
+                <field name = "sale_order_ids"/>
+                <field name="work_order_ids"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+
+
+
+
+
+    <!-- Branch Form -->
+    <record id="view_mrp_weaving_branch__form" model="ir.ui.view">
+        <field name="name"> Weaving Branch</field>
+        <field name="model">weaving.branch</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name = "mo_order_ids"/>
+                            <field name="division"/>
+                        </group>
+                        <group>
+                            <field name = "sale_order_ids"/>
+                            <field name="work_order_ids"/>
+                        </group>
+                    </group>
+                    <!-- <notebook>
+                        <page string="Product Details">
+                            <field name="jobwork_id" mode="tree">
+                                <tree editable="buttom">
+                                    <field name="subcontractor_id"/>
+                                    <field name="branch_id"/>
+                                    <field name="issue_date"/>
+                                    <field name="jobwork_allotment_id "/>
+                                    <field name="work_order_ids"/>
+                                    <field name="expected_received_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook> -->
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+<!-- 
+    <record id="view_filter_group_mrp_weaving_branch" model="ir.ui.view">
+        <field name="name">Branch</field>
+        <field name="model">weaving.branch</field>
+        <field name="arch" type="xml">
+            <search string="Status">
+                <group expand="1" string="Group By">
+                    <filter string="Branch" name='name' context="{'group_by':'name'}"/>
+                    <filter string="Division" name='division' context="{'group_by':'division'}"/>
+                </group>
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- <record id="server_mrp_branch_id" model="ir.actions.server">
+        <field name="name">Product allotment Map</field>
+        <field name="model_id" ref="innorug_manufacture.model_mrp_branch"/>
+        <field name="binding_model_id" ref="innorug_manufacture.model_mrp_branch"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.map_sub_product_allotement_record()</field>
+    </record> -->
+
+
+    <record id="action_mrp_weaving_branch_id" model="ir.actions.act_window">
+        <field name="name">Branch</field>
+        <field name="res_model">weaving.branch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo> 

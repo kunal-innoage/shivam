@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Branch Tree -->
+    <record id="view_mrp_main_job_work_tree" model="ir.ui.view">
+        <field name="name">Main Job Work</field>
+        <field name="model">main.jobwork</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="subcontractor_id"/>
+                <field name="branch_id"/>
+                <field name="issue_date"/>
+                <!-- <field name="jobwork_allotment_ids"/> -->
+                <field name="work_order_ids" widget="many2many_tags"/>
+                <field name="expected_received_date"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+
+
+    <!-- Branch Form -->
+    <record id="view_mrp_main_job_work_form" model="ir.ui.view">
+        <field name="name">Main Job Work</field>
+        <field name="model">main.jobwork</field>
+        <field name="arch" type="xml">
+            <form >
+                <header>
+                    <button name="button_action_for_alloted_components" string="Allot Material" type="object" class="btn-primary" attrs="{'invisible': [('is_active_allote', '=',False)]}" />
+                    <field name="state" widget="statusbar" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received,cancel" />
+
+
+                    <button name="button_action_for_validate_main_job" string="CONFIRM" type="object" class="btn-primary" states ="draft" />
+                    <button name="button_action_for_cost_center_main_job" string="COST CENTER" type="object" class="btn-primary" attrs="{'invisible': [('is_active_cost', '=',False)]}" />
+                    <button name="button_action_for_qa_process_main_job" string="QA PROCESS" type="object" class="btn-primary" attrs="{'invisible': [('state', 'in',['draft','allotment','qa','waiting_baazar','baazar','received'])]}" />
+                    <button name="button_action_for_release_main_job" string="RELEASE" type="object" class="btn-primary" attrs="{'invisible': [('is_active_release', '=',False)]}" />
+                    <button name="button_action_for_baazar_main_job" string="BAAZAR" type="object" class="btn-primary" attrs="{'invisible': [('state', 'not in',['waiting_baazar'])]}" />
+                    <button name="button_action_for_no_amended_qty_main_job" string="NO AMENDED" type="object" class="btn-primary" />
+                    <button name="button_action_for_no_return_qty_main_job" string="NO RETURN" type="object" class="btn-primary" />
+                    <button name="button_action_for_done_main_job" string="DONE" type="object" class="btn-primary" statusbar_visible ="draft,allotment,release,qa,waiting_baazar,baazar,received" />
+                    <button name="button_action_for_cancel_main_job" string="CANCEL" type="object" class="btn-primary"/>
+                    <button name="button_action_for_force_qa_main_job" string="FORCE QA" type="object" class="btn-primary" attrs="{'invisible': [('state', 'not in',['qa'])]}" />
+                </header>
+                <sheet>
+                    <div class="h2">
+                        <field name="reference" nolabel="1"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="subcontractor_id" attrs="{'required': [('active_sub', '=',False)]}"/>
+                            <field name="branch_id"/>
+                            <field name="issue_date"/>
+                        </group>
+                        <group>
+                            <!-- <field name="jobwork_allotment_ids" widget="many2many_tags"/> -->
+                            <field name="work_order_ids" widget="many2many_tags"/>
+                            <field name="main_cost_center_id"/>
+                            <field name="expected_received_date"/>
+                            <field name="active_sub" invisible="1" />
+                            <field name="is_active_cost" invisible="1" />
+                            <field name="is_active_release" invisible="1" />
+                            <field name="is_active_allote" invisible="1" />
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Job Work">
+                            <field name="jobwork_line_ids" mode="tree">
+                                <tree editable="buttom">
+                                    <field name="product_id" string="Product"/>
+                                    <field name="original_product_qty" string="Product Qty(Units)" attrs="{'invisible': [('active_org_qty_product', '=',False)]}"/>
+                                    <field name="product_qty" string="Alloted Product Qty(Units)" attrs="{'invisible': [('active_qty_product', '=',False)]}" />
+                                    <field name="manager_id" invisible="1"/>
+                                    <field name="work_center_id"/>
+                                    <field name="state"/>
+                                    <field name="subcontractor_id" invisible="1" />
+                                    <field name="jobwork_allotment_id" invisible="1" />
+                                    <field name="active_qty_cnf" invisible="1" />
+                                    <field name="active_qty_add" invisible="1" />
+                                    <field name="active_qty_product" invisible="1" />
+                                    <field name="active_components_allote" invisible="1" />
+                                    <field name="active_org_qty_product" invisible="1" />
+                                    <button name="button_action_for_open_job_work" string="Open JobWork" type="object" class="btn-primary"/>
+                                    <button name="button_action_for_cost_center" string="Cost Center" type="object" class="btn-primary" attrs="{'invisible': [('active_components_allote', '=',False)]}"/>
+                                    <button name="button_action_for_allot_product" string="ALLOTE COMPONENTS" type="object" class="btn-primary" attrs="{'invisible': [('active_components_allote', '=',False)]}"/>
+                                    <button name="add_qty" type="object" class="btn-primary" string="ADD Qty" data-hotkey="a" attrs="{'invisible': [('active_qty_add', '=',False)]}"/>
+                                    <button name="confirm_qty" type="object" class="btn-primary" string="Confirm Qty" data-hotkey="q" attrs="{'invisible': [('active_qty_cnf', '=',False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Alloted Components">
+                            <field name="main_jobwork_components_lines" mode="tree">
+                                <tree>
+                                    <field name="alloted_product_id"/>
+                                    <field name="alloted_quantity" sum="Alloted Qty" string="Alloted Qty"/>
+                                    <field name="amended_quantity" sum="Total Amended Qty" />
+                                    <field name="consumed_quantity" sum="Total Consumed Qty"/>
+                                    <field name="returned_quantity" sum="Total Return Qty"/>
+                                    <field name="total_allot_qty" sum="Total Alloted Qty" />
+                                    <field name="product_uom" sum="KG" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+
+
+    <!-- <record id="view_filter_group_mrp_branch" model="ir.ui.view">
+        <field name="name">Branch</field>
+        <field name="model">mrp.jobwork.allotment.product</field>
+        <field name="arch" type="xml">
+            <search string="Status">
+                <group expand="1" string="Group By">
+                    <filter string="Branch" name='name' context="{'group_by':'name'}"/>
+                    <filter string="Division" name='division' context="{'group_by':'division'}"/>
+                </group>
+            </search>
+        </field>
+    </record> -->
+
+
+    <record id="action_mrp_main_job_works_id" model="ir.actions.act_window">
+        <field name="name">Main Job Work</field>
+        <field name="res_model">main.jobwork</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo> 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cost Center Tree -->
+    <record id="view_mrp_cost_center_line_tree" model="ir.ui.view">
+        <field name="name">Cost Center Line</field>
+        <field name="model">mrp.cost.center.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="check_no"/>
+                <field name="total_square_yard"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+
+    <!-- Cost Center Form -->
+    <record id="view__mrp_cost_center_line_form" model="ir.ui.view">
+        <field name="name">Cost Center Line</field>
+        <field name="model">mrp.cost.center.line</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <div class="h2">
+                        <field name="product_id" nolabel="1"/>
+                    </div>
+                    <group>
+                        <group>
+                         <field name="product_id"/>
+                            <field name="check_no"/>
+                            <field name="total_square_yard"/>
+                            <label for="time_incentive"/>
+                            <div class="o_row">
+                                <field name="time_incentive" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                            <!-- <label for="fragments"/>
+                            <div class="o_row">
+                                <field name="fragments" widget="float"/>
+                                <span>INR</span>
+                            </div> -->
+                        </group>
+                        <group>
+                            <field name="mrp_production_id" string= "Production"/>
+                            <field name="last_baazar_date"/>
+                            <label for="cost_per_yard"/>
+                            <div class="o_row">
+                                <field name="cost_per_yard" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                            <label for="time_penalities"/>
+                            <div class="o_row">
+                                <field name="time_penalities" widget="float"/>
+                                <span>INR</span>
+                            </div>
+                            <!-- <label for="fragments_penality"/>
+                            <div class="o_row">
+                                <field name="fragments_penality" widget="float"/>
+                                <span>INR</span>
+                            </div> -->
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+
+
+    <!-- action through python module "work order" -->
+    <!-- <record model="ir.actions.act_window" id="mrp_cost_centre_action_id">
+        <field name="name">Cost Center</field>
+        <field name="res_model">mrp.cost.center.line</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view__mrp_cost_center_form"/>
+    </record> -->
+
+
+
+
+    <record id="action_mrp_cost_center_line_id" model="ir.actions.act_window">
+        <field name="name">Cost Center Line</field>
+        <field name="res_model">mrp.cost.center.line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <!-- <menuitem id="menu_cost_center_id" name="Cost Center" parent="menu_mrp_bazar_id" action="action_mrp_cost_center_id" sequence="1"/>  -->
+</odoo> 

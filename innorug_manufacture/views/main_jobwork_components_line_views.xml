@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- bom.operation.component Tree -->
+    <record id="view_component_line_tree" model="ir.ui.view">
+        <field name="name">bom.operation.component</field>
+        <field name="model">main.jobwork.components.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="alloted_product_id"/>
+                <field name="alloted_quantity"/>
+                <field name="consumed_quantity"/>
+                <field name="returned_quantity"/>
+                <field name="amended_quantity"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--bom.operation.component Form -->
+    <record id="view_component_line_form" model="ir.ui.view">
+        <field name="name">component line</field>
+        <field name="model">main.jobwork.components.line</field>
+        <field name="arch" type="xml">
+            <form >
+                <sheet>
+                    <group col="4">
+                        <field name="alloted_product_id"/>
+                        <field name="alloted_quantity"/>
+                        <field name="consumed_quantity"/>
+                        <field name="returned_quantity"/>
+                        <field name="amended_quantity"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo> 

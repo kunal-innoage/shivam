@@ -19,8 +19,6 @@
 
 
 
- amended_quantity = fields.Float("Amended Qty(kg)")
-
     <!-- Cost Center Form -->
     <!-- <record id="view__mrp_cost_center_form" model="ir.ui.view">
             <field name="name">Cost Center</field>
